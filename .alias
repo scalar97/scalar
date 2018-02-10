@@ -4,7 +4,7 @@ cd() { [ $# -eq 0 ] && builtin cd ~  ||  { builtin cd "$1" && ls -FG;} }
 
 alias ll='ls -alFgG'
 alias la='ls -AF'
-alias l='ls -CF'
+alias l='ls -CGF'
 alias grep='grep --color=auto'
 alias gdb='gdb -q'
 alias calc="sage"
@@ -37,3 +37,4 @@ alias y='youtube'
 alias wiki='google wikipedia'
 alias jac='javac *.java && java Main && rm *.class'
 alias kl='kill %1' 
+alias emacs='emacs-25.3'

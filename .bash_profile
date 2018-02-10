@@ -1,5 +1,5 @@
 #
-# ~/.bashrc
+# ~/.bash_profile
 #
 
 # If not running interactively, don't do anything
@@ -43,9 +43,9 @@ fi
 al()
 {
 	#alias arg1 into arg2 then write this alias to file_name
-	#also sources the ~/.bashrc file to include the changes
+	#also sources the ~/.bash_profile file to include the changes
 	echo 'alias '$1="'$2'" >> ~/.alias
-	. ~/.bashrc
+	. ~/.bash_profile
 }
 
 #google search and youtube search from comand line
