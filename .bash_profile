@@ -30,13 +30,14 @@ shopt -s histappend
 shopt -s checkwinsize
 
 # enable color support
-if [ -x /usr/bin/dircolors ]; then
-    test -r ~/.dircolors && eval "$(dircolors -b ~/.dircolors)" || eval "$(dircolors -b)"
-fi
+export CLICOLOR=1
+
+# set emacs as defaiult editor
+export EDITOR="emacs-25.3"
 
 # eneble auto completion
-if [ -f /usr/share/bash-completion/bash_completion ]; then
-  . /usr/share/bash-completion/bash_completion
+if [ -f $(brew --prefix)/etc/bash_completion ]; then
+. $(brew --prefix)/etc/bash_completion
 fi
 
 # create an alias and add it to the alias config file
