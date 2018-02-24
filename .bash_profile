@@ -92,7 +92,7 @@ function jumpb() {
 }
 # open github remote repository from current repo or from subdirectory
 function github() {
-        jump="xdg-open https://github.com/tati-z/"
+        jump="open https://github.com/tati-z/"
         # search for the git folder
         if [ -d ".git" ]; then
             $jump$(basename $PWD)
@@ -102,9 +102,9 @@ function github() {
 }
 function gitc(){
     if [ -d ".git" ]; then
-        git commit -m "$dir" # commit to this branch
+        git commit -m "$@" # commit to this branch
     else
-	jump_run 'git commit -m "$1"'
+	jump_run 'git commit -m "$@"'
     fi
 }
 
