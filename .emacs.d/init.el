@@ -32,6 +32,7 @@
  '(php-mode-coding-style (quote symfony2))
  '(python-indent-guess-indent-offset-verbose nil)
  '(python-shell-interpreter "python3.6")
+ '(sh-indentation 2)
  '(web-mode-enable-auto-closing t)
  '(web-mode-enable-auto-expanding t)
  '(web-mode-enable-auto-indentation nil t)
@@ -98,11 +99,19 @@
 (setq linum-format "%2d ") ;number format. space after number and display in 01, 02 format
 (delete-selection-mode 1) ;replace and delete on selection
 (menu-bar-mode -1) ;disable menu bar
+(tool-bar-mode -1)
 (setq column-number-mode t) ;display both lines and columns in the mode line
 (setq make-backup-files nil) ; stop creating backup~ files
 (electric-indent-mode t) ; indent automatically
 (visual-line-mode t); better wrapping
 
+
+;;; KEYBOARD LAYOUT ON MAC
+(define-key input-decode-map "\e[1;2A" [S-up])
+(if (equal "xterm" (tty-type))
+    (define-key input-decode-map "\e[1;2A" [S-up]))
+(defadvice terminal-init-xterm (after select-shift-up activate)
+  (define-key input-decode-map "\e[1;2A" [S-up]))
 
 ;;; PACKAGE MODE ACTIVATION
 
@@ -164,6 +173,24 @@
 	    (lambda ()
 	      (setq flyspell-mode 1)
 	      (toggle-truncate-lines -1)))
+
+
+;;; TERM MODE : enable mouse support when using the terminal
+
+(add-hook 'term-mode
+	  (lambda ()
+	    (setq xterm-mouse-mode t)))
+(eval-after-load 'term-mode
+  '((define-key [mouse-4] (lambda ()(interactive) '(scroll-down 1)))
+    (define-key [mouse-5] (lambda ()(interactive) '(scroll-up 1)))))
+;; split the window in two only when in terminal
+
+(defun my-term ()
+ (interactive)
+ (term "/bin/bash"))
+(global-set-key (kbd "M-r") 'my-term)
+
+
 
 ;;; C-MODE
 
