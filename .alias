@@ -36,3 +36,5 @@ alias python='python3.6'
 alias emacs='emacs-25.3'
 alias ps='ps -a'
 alias grepp='grep -rine'
+alias c='clear'
+

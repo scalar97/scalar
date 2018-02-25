@@ -77,7 +77,7 @@ function jac() {
     rm -f ie/dit/*.class && javac ie/dit/*.java && java ie.dit.Main
     [ $ret == "0" ] || popd
 }
-function jumpb() {
+function jump_run() {
     # save current directory to the stack to come back to it later
     dir=".git"
     pushd . > /dev/null # save the current directory
@@ -88,7 +88,7 @@ function jumpb() {
     done
     # run the comand passsed if a remote repository was found
     [ $(basename $PWD) != "/" ] && $1 && popd > /dev/null && return 0
-    popd > /dev/null && echo "Error: no master branch"
+    popd > /dev/null && echo "Error: no remote branch found."
 }
 # open github remote repository from current repo or from subdirectory
 function github() {
