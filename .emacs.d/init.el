@@ -102,6 +102,7 @@
 (tool-bar-mode -1)
 (setq column-number-mode t) ;display both lines and columns in the mode line
 (setq make-backup-files nil) ; stop creating backup~ files
+(setq vc-follow-symlinks nil) ; get emacs to always follow symbolic links
 (electric-indent-mode t) ; indent automatically
 (visual-line-mode t); better wrapping
 

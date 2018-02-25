@@ -1,3 +1,5 @@
+# -*- mode: sh -*-
+
 alias ll='ls -alFgG'
 alias la='ls -AF'
 alias l='ls -CGF'
@@ -37,4 +39,4 @@ alias emacs='emacs-25.3'
 alias ps='ps -a'
 alias grepp='grep -rine'
 alias c='clear'
-
+alias cat='cat -n'
