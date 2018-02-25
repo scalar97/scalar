@@ -98,6 +98,15 @@ function github() {
             jump_run '$jump$(basename $PWD)'
 	fi    
 }
+# get the status of all the remote repositories in a given folder
+function git_status_dir() {
+    pushd . > /dev/null
+    for dir in */ ; do
+	echo && builtin cd $dir ; git status
+	builtin cd ../
+    done
+    popd > /dev/null
+}
 function gitc(){
     if [ -d ".git" ]; then
         git commit -m "$@" # commit to this branch
