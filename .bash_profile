@@ -40,17 +40,18 @@ fi
 
 # shell functions
 
+# these swap functions are used with aliaces
 swap() { $1 $3; $2;}
 swap_pipe() { $1 $3| $2;}
+cag() { cat "$1" | grep "$2"; } # cat and grep a keyword
+
 cd() { [ $# -eq 0 ] && builtin cd ~  ||  { builtin cd "$1" && ls -FG;} }
 
 # create an alias and add it to the alias config file
-al()
-{
-	#alias arg1 into arg2 then write this alias to file_name
-	#also sources the ~/.bash_profile file to include the changes
-	echo 'alias '$1="'$2'" >> ~/.alias
-	. ~/.bash_profile
+al(){
+    # create aliaces and write them to file for later sourcing
+    echo 'alias '$1="'$2'" >> ~/.alias
+    . ~/.bash_profile
 }
 
 #google search and youtube search from comand line
@@ -64,25 +65,22 @@ google()
 	    search="$search%20$term"
 	fi
     done
-    if [[ "$1" == '-youtube' ]]; then
-        open https://www.youtube.com/results?search_query=$search
-    else
-	open "http://www.google.com/search?q=$search"
-    fi
+    open "https://www."$([[ "$1" == '-youtube' ]] &&
+	echo -n "youtube.com/results?search_query" ||
+	echo -n "google.com/search?q" ; echo "=$search"); 
 }
 #compile java main package later will look for spacific package
 function jac() {
     ret=$([ $(basename $PWD) == "java" ] && echo 0 || echo 1)
-    [ $ret == "0" ] || pushd . && builtin cd ~/Desktop/GIT/Java-OOP/java
+    [ $ret == "0" ] || pushd . > /dev/null  && builtin cd ~/Desktop/GIT/Java-OOP/java
     rm -f ie/dit/*.class && javac ie/dit/*.java && java ie.dit.Main
-    [ $ret == "0" ] || popd
+    [ $ret == "0" ] || popd > /dev/null
 }
 function jump_run() {
-    # save current directory to the stack to come back to it later
     dir=".git"
     pushd . > /dev/null # save the current directory
 
-    # go up the directory tree until a branch is found, return if the root is reached
+    # go up the directory tree until a branch is found,or the root is reached
     while [ ! -e $dir ]  && [ $(basename $PWD) != '/' ] ; do
     builtin cd ../
     done
@@ -90,10 +88,10 @@ function jump_run() {
     [ $(basename $PWD) != "/" ] && $1 && popd > /dev/null && return 0
     popd > /dev/null && echo "Error: no remote branch found."
 }
-# open github remote repository from current repo or from subdirectory
+# open github remote repository from current branch or from subdirectory
 function github() {
         jump="open https://github.com/tati-z/"
-        # search for the git folder
+        # search for the .git folder
         if [ -d ".git" ]; then
             $jump$(basename $PWD)
 	else
@@ -110,3 +108,4 @@ function gitc(){
 
 # sources the aliaces
 . ~/.alias
+
