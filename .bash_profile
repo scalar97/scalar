@@ -5,11 +5,11 @@
 # If not running interactively, don't do anything
 [[ $- != *i* ]] && return
 
-PS1='[\[\033[1;35m\]\u\[\033[01;32m\]@\h\[\033[00m\] \[\033[1;33m\]\W\e[1;30m $(date '+%I:%M')\[\033[00m\]]\$ '
+PS1='[\e[1;35m\u\e[01;32m@\h\e[00m \e[1;33m\]\W\e[1;30m $(date '+%I:%M')\e[00m]\$ '
 PS2="$ "
 
 if [ $TILIX_ID ] || [ $VTE_VERSION ]; then
-        source /etc/profile.d/vte.sh
+    source /etc/profile.d/vte.sh
 fi
 
 # set encvironemental variables.
@@ -82,7 +82,7 @@ function jump_run() {
 
     # go up the directory tree until a branch is found,or the root is reached
     while [ ! -e $dir ]  && [ $(basename $PWD) != '/' ] ; do
-    builtin cd ../
+	builtin cd ../
     done
     # run the comand passsed if a remote repository was found
     [ $(basename $PWD) != "/" ] && $1 && popd > /dev/null && return 0
@@ -100,13 +100,15 @@ function github() {
 }
 # get the status of all the remote repositories in a given folder
 function git_status_dir() {
-    pushd . > /dev/null
-    for dir in */ ; do
-	echo && builtin cd $dir ; git status
-	builtin cd ../
-    done
-    popd > /dev/null
+    # check if current directory is already a branch or run through every subdirectory.
+    [ -d ".git" ] && git status || {
+	  for dir in */ ; do
+	      [ -d "$dir/.git" ] && echo && builtin cd $dir &&  git status
+	      [ -d ".git" ] && builtin cd ../  # only cd ../ if builtin cd $dir happened 
+	  done
+    }
 }
+# commits from current branch, or from any subdirectory of current branch
 function gitc(){
     if [ -d ".git" ]; then
         git commit -m "$@" # commit to this branch
