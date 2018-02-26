@@ -26,7 +26,7 @@ alias ..='cd ..'
 alias ...='cd ../..'
 alias .b='. ~/.bash_profile'
 alias gd='git diff'
-alias g="google"
+alias g="google" #alias to the google function in .bash_profile
 alias gmail='open https://mail.google.com/mail/u/0/#inbox'
 alias facebook='open https://www.facebook.com/'
 alias diff='diff -y --color=always'
@@ -40,5 +40,6 @@ alias ps='ps -a'
 alias grepp='grep -rine'
 alias c='clear'
 alias cat='cat -n'
-alias gss='git_status_dir'
+alias gss='git_dir status' # gets the status of all remote repos from specified folder
+alias gpp='git_dir pull'   # pull all directories at once.
 alias joke='fortune -s | cowsay'

@@ -99,12 +99,12 @@ function github() {
 	fi    
 }
 # get the status of all the remote repositories in a given folder
-function git_status_dir() {
+function git_dir() {
     # check if current directory is already a branch or run through every subdirectory.
-    [ -d ".git" ] && git status || {
+    [ -d ".git" ] && git $1 || {
 	  for dir in */ ; do
-	      [ -d "$dir/.git" ] && echo && builtin cd $dir &&  git status
-	      [ -d ".git" ] && builtin cd ../  # only cd ../ if builtin cd $dir happened 
+	      [ -d "$dir/.git" ] && echo && builtin cd $dir &&  git $1
+	      [ -d ".git" ] && builtin cd ../  # only cd .. if builtin cd $dir happened 
 	  done
     }
 }
