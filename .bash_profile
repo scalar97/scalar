@@ -8,10 +8,6 @@
 PS1='[\e[1;35m\u\e[01;32m@\h\e[00m \e[1;33m\]\W\e[1;30m $(date '+%I:%M')\e[00m]\$ '
 PS2="$ "
 
-if [ $TILIX_ID ] || [ $VTE_VERSION ]; then
-    source /etc/profile.d/vte.sh
-fi
-
 # set encvironemental variables.
 export CLICOLOR=1
 export CDPATH=".:~:~/Desktop/:~/Desktop/GIT/"

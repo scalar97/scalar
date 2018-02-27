@@ -192,6 +192,11 @@
 (global-set-key (kbd "M-r") 'my-term)
 
 
+;;; COMMINT -- repeats the last command using arrow keys
+(progn(require 'comint)
+      (define-key comint-mode-map (kbd "<up>") 'comint-previous-input)
+      (define-key comint-mode-map (kbd "<down>") 'comint-next-input))
+
 
 ;;; C-MODE
 
