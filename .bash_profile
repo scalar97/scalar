@@ -82,18 +82,22 @@ function jump_run() {
     done
     # run the comand passsed if a remote repository was found
     [ $(basename $PWD) != "/" ] && $1 && popd > /dev/null && return 0
-    popd > /dev/null && echo "Error: no remote branch found."
+    popd > /dev/null && echo "Error: no remote branch found." && return 1
 }
-# open github remote repository from current branch or from subdirectory
-function github() {
-        jump="open https://github.com/tati-z/"
-        # search for the .git folder
-        if [ -d ".git" ]; then
-            $jump$(basename $PWD)
-	else
-            jump_run '$jump$(basename $PWD)'
-	fi    
+# now uses the same funtion to perfom different git command rather having a custom for each
+function git_do() {
+    if [ -d ".git" ]; then
+        case "$1" in
+	    "open") open $2$(basename $PWD) ;;
+	    "*commit*") $1 $2 ;;
+	esac
+    else
+	# if no repository was found. simply open github main page
+        [ "open" = "$1" ] && jump_run '$1 $2$(basename $PWD)' >/dev/null || $1 $2
+	[ "*commit*" = "$1" ] && jump_run '$@' # will print error if no branch was found
+    fi
 }
+
 # get the status of all the remote repositories in a given folder
 function git_dir() {
     # check if current directory is already a branch or run through every subdirectory.
@@ -104,15 +108,8 @@ function git_dir() {
 	  done
     }
 }
-# commits from current branch, or from any subdirectory of current branch
-function gitc(){
-    if [ -d ".git" ]; then
-        git commit -m "$@" # commit to this branch
-    else
-	jump_run 'git commit -m "$@"'
-    fi
-}
-
 # sources the aliaces
 . ~/.alias
 
+# display a joke or a short quote at login,if both fortune and cowsay are installed,can use brew.
+# command -v fortune  >/dev/null 2>&1 && command -v cowsay >/dev/null 2>&1  && fortune -s | cowsay
