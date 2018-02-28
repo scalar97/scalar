@@ -87,14 +87,14 @@ function jump_run() {
 # now uses the same funtion to perfom different git command rather having a custom for each
 function git_do() {
     if [ -d ".git" ]; then
-        case "$1" in
+      case "$1" in
 	    "open") open $2$(basename $PWD) ;;
-	    "*commit*") $1 $2 ;;
+	    *"commit"*) $1 "$2" ;;
 	esac
     else
 	# if no repository was found. simply open github main page
         [ "open" = "$1" ] && jump_run '$1 $2$(basename $PWD)' >/dev/null || $1 $2
-	[ "*commit*" = "$1" ] && jump_run '$@' # will print error if no branch was found
+	[ "*commit*" = "$1" ] && jump_run "$1 $2" # will print error if no branch was found
     fi
 }
 
