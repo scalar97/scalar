@@ -164,7 +164,7 @@
 (global-set-key (kbd "C-x a") 'mc/mark-all-like-t)
 
 (font-lock-add-keywords 'python-mode
-    '(("\\<[\\+-]?[0-9]+\\(.[0-9]+\\)?\\>" 0 'font-lock-constant-face) 
+    '(("\\<[\\+-]?[0-9]+\\(.[0-9]+\\)?\\>" 0 'font-lock-constant-face)
       ("\\([][{}()~^<>:=,.\\+*/%-]\\)" 1 'font-lock-negation-char-face)
       ("\\<\\([a-zA-Z_]*\\)\\s-*\(" 1 'font-lock-function-name-face)))
 
@@ -198,6 +198,39 @@
       (define-key comint-mode-map (kbd "<down>") 'comint-next-input))
 
 
+;;;LANGUAGE SPECIFIC MODE
+
+;;; PYTHON MODE
+
+(global-set-key (kbd "C-x p")'run-python)
+
+;; disable flycheck in python mode for less distractions
+(defun disable-flycheck-mode ()
+   (interactive)
+   (flycheck-mode -1))
+(add-hook 'python-mode-hook' disable-flycheck-mode)
+
+;; jedi on dot autocompletion and python documetation
+(add-hook 'python-mode-hook 'jedi:setup)
+(setq jedi:complete-on-dot t)
+
+(add-hook 'python-mode-hook
+      (lambda ()
+        (setq indent-tabs-mode t)
+		(setq python-indent 4)
+        (setq tab-width 4)))
+
+(font-lock-add-keywords 'python-mode
+    '(("\\<[\\+-]?[0-9]+\\(.[0-9]+\\)?\\>" 0 'font-lock-constant-face)
+      ("\\([][{}()~^<>:=,.\\+*/%-]\\)" 1 'font-lock-negation-char-face)
+      ("\\<\\([a-zA-Z_]*\\)\\s-*\(" 1 'font-lock-function-name-face)))
+
+;;; ORG MODE
+(setq org-src-fontify-natively t)
+(add-hook 'org-mode-hook
+		  (lambda ()
+			(setq flyspell-mode 1)
+			(toggle-truncate-lines -1)))
 ;;; C-MODE
 
 ;; fix indentation style
@@ -215,7 +248,29 @@
     ("\\([ #a-zA-Z]*[[:alpha:]][^,{]*\\)" 1 compilation-warning-face) ; id, class, tags
     ("\\([:,\\*%]\\)" 1 'font-lock-builtin-face))); misc
 
+;;; JAVA MODE
+(add-hook 'java-mode-hook (lambda ()
+	(setq c-basic-offset 4
+		tab-width 4
+		indent-tabs-mode t)))
+
+
+;;; (WEB , CSS , JS2) MODE
+
+(add-to-list 'auto-mode-alist '("\\.html?\\'" . web-mode))
+(add-to-list 'auto-mode-alist '("\\.xml?\\'" . web-mode))
+(add-to-list 'auto-mode-alist '("\\.php?\\'" . web-mode))
+(add-to-list 'auto-mode-alist '("\\.js?\\'" . js2-mode))
+
+(font-lock-add-keywords 'css-mode
+  '(("\\([[:alpha:]-]+\\)[^: ]?:" 1 font-lock-preprocessor-face) ; selectors
+	("^[ \t]*\\([.].+\\)$" 1 font-lock-keyword-face) ; selectors
+	(":\\([ .a-zA-Z0-9]*[[:alpha:]][^,;{]*\\)" 1 font-lock-negation-char-face) ; values after semi colon
+	("\\([ #a-zA-Z]*[[:alpha:]][^,{]*\\)" 1 compilation-warning-face) ; id, class, tags
+	("\\([:,\\*%]\\)" 1 'font-lock-builtin-face))); misc
+
+
 
 ;;; Commentary:
 (provide '.emacs)
-;;; .emacs ends here
+;;; init.el ends here
