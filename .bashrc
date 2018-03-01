@@ -18,9 +18,6 @@ shopt -s histappend
 # checks and resises the window size if necessary.
 shopt -s checkwinsize
 
-PS1='[\e[1;35m\u\e[01;32m@\h\e[00m \e[1;33m\]\W\e[1;30m $(date '+%I:%M')\e[00m]\$ '
-PS2="$ "
-
 # set encvironemental variables.
 export CLICOLOR=1
 export CDPATH=".:~:~/Desktop/:~/Desktop/GIT/"
@@ -32,7 +29,8 @@ export EDITOR="emacs-25.3"
 
 if test $(uname) = 'Linux'; then
     # if .alias is being used on Arch-Linux
-    readonly OPEN="xdg-open"
+    OPEN="xdg-open"
+    PS1='[\[\033[1;35m\]\u\[\033[01;32m\]@\h\[\033[00m\] \[\033[1;33m\]\W\[\033[1;30m\] $(date '+%I:%M')\[\033[0;00m\]]\$ '
     # enable color support on Arch-Linux
     if [ -x /usr/bin/dircolors ]; then
       test -r ~/.dircolors && eval "$(dircolors -b ~/.dircolors)" \
@@ -43,13 +41,15 @@ if test $(uname) = 'Linux'; then
       . /usr/share/bash-completion/bash_completion
     fi
 else
-    readonly OPEN="open" # on Darwin xdg-open equivalent is open
+    OPEN="open" # on Darwin xdg-open equivalent is open
+    PS1='[\e[1;35m\u\e[01;32m@\h\e[0;00m \e[1;33m\]\W\e[1;30m $(date '+%I:%M')\e[00m]\$ '
     # eneble auto completion
     if [ -f $(brew --prefix)/etc/bash_completion ]; then
     . $(brew --prefix)/etc/bash_completion
     fi
 fi
 
+PS2="$ "
 
 # shell functions
 
@@ -70,7 +70,7 @@ google()
 	    search="$search%20$term"
 	fi
     done
-    $open "https://www."$([[ "$1" == '-youtube' ]] &&
+    $OPEN "https://www."$([[ "$1" == '-youtube' ]] &&
 	echo -n "youtube.com/results?search_query" ||
 	echo -n "google.com/search?q" ; echo "=$search"); 
 }
@@ -95,7 +95,7 @@ function jump_run() {
 function git_do() {
     if [ -d ".git" ]; then
         case "$1" in
-	    *"open"*) $open $2$(basename $PWD) ;;
+	    *"open"*) $OPEN $2$(basename $PWD) ;;
 	    *"commit"*) $1 "$2" ;;
 	esac
     else
