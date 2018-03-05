@@ -16,21 +16,22 @@ HISTCONTROL=ignoreboth
 shopt -s histappend
 
 # checks and resises the window size if necessary.
-shopt -s checkwinsize
+# shopt -s checkwinsize
 
 # set encvironemental variables.
 export CLICOLOR=1
 export CDPATH=".:~:~/Desktop/:~/Desktop/GIT/"
 export LSCOLORS=ExFxBxDxCxegedabagacad
 export EDITOR="emacs-25.3"
-
+export PATH="$PATH:~/.local/bin/:."
+export PS1='[\[\033[1;35m\]\u\[\033[01;32m\]@\h\[\033[m\] \[\033[1;33m\]\W\[\033[1;30m\] $(date '+%I:%M')\[\033[0;m\]]\$ '
+export PS2="$ "
 
 # set global variable based on OS in (LINUX, DARWIN)
 
 if test $(uname) = 'Linux'; then
     # if .alias is being used on Arch-Linux
     OPEN="xdg-open"
-    PS1='[\[\033[1;35m\]\u\[\033[01;32m\]@\h\[\033[00m\] \[\033[1;33m\]\W\[\033[1;30m\] $(date '+%I:%M')\[\033[0;00m\]]\$ '
     # enable color support on Arch-Linux
     if [ -x /usr/bin/dircolors ]; then
       test -r ~/.dircolors && eval "$(dircolors -b ~/.dircolors)" \
@@ -42,14 +43,11 @@ if test $(uname) = 'Linux'; then
     fi
 else
     OPEN="open" # on Darwin xdg-open equivalent is open
-    PS1='[\e[1;35m\u\e[01;32m@\h\e[0;00m \e[1;33m\]\W\e[1;30m $(date '+%I:%M')\e[00m]\$ '
     # eneble auto completion
     if [ -f $(brew --prefix)/etc/bash_completion ]; then
     . $(brew --prefix)/etc/bash_completion
     fi
 fi
-
-PS2="$ "
 
 # shell functions
 
@@ -87,8 +85,10 @@ function jump_run() {
     while [ ! -d ".git/" ]  && [ $(basename $PWD) != '/' ] ; do
 	builtin cd ../
     done
+    echo && pwd
+    
     # run the comand passsed if a remote repository was found
-    [ $(basename $PWD) != "/" ] && $1 && popd > /dev/null && return 0
+    [ $(basename $PWD) != "/" ] && echo $1 && popd > /dev/null && return 0
     popd > /dev/null && echo "Error: no remote branch found." && return 1
 }
 # now uses the same funtion to perfom different git command rather having a custom for each
@@ -100,8 +100,8 @@ function git_do() {
 	esac
     else
 	# if no repository was found. simply open github main page
-        [ "*open*" = "$1" ] && jump_run '$1 $2$(basename $PWD)' >/dev/null || $1 $2
-	[ "*commit*" = "$1" ] && jump_run "$1 $2" # will print error if no branch was found
+        [[ "$1" = *"open"* ]] && jump_run '$1 $2$(basename $PWD)' >/dev/null || $1 $2
+	[[ "$1" = *"commit"* ]] && echo  "$1 '$2'" | jump_run # will print error if no branch was found
     fi
 }
 # get the status of all the remote repositories in a given folder
