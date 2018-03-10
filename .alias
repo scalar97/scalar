@@ -29,6 +29,8 @@ swap_pipe() { $1 $3| $2;}
 # function aliaces
 cag() { cat "$1" | grep "$2"; } # cat and grep a keyword
 hig() { history | grep $1; }
+function ga() { git add $@ && git status ;}
+function gl() { git log --graph --pretty=format:'%Cred%h%Creset - %C(bold green)(%cr)%Creset%C(yellow) : %s %C(bold blue)%d%Creset' $@ ;}
 cd() { [ $# -eq 0 ] && builtin cd ~  ||  { builtin cd "$1" && ls -FG;} }
 
 # custom aliaces
@@ -44,13 +46,12 @@ alias locate='swap_pipe "locate" "more" $1'
 alias j='swap_pipe "joke.sh" "less" 8'
 alias apropos='swap_pipe "apropos" "more" $1'
 alias github='git_do "$OPEN" "https://github.com/tati-z/"'
-alias ga='git_do "git add"' # files to add will be specified at the command line
 alias gc='git_do "git commit -m"' #second argument will be added at the command line
 alias gr='git rm -f'
 alias gs='git status'
-alias gp='git pull'
+alias gu='git pull'
+alias gp='git push'
 alias gpo='git push origin master && github'
-alias gl='git log --pretty=format:"%an"  "%at"  "%s"'
 alias gd='git diff'
 alias gss='git_dir status' # gets the status of all remote repos from specified folder
 alias gpp='git_dir pull'   # pull all directories at once.
@@ -63,10 +64,9 @@ alias youtube='google -youtube'
 alias y='youtube'
 alias wiki='google wikipedia'
 alias kl='kill %1' 
-alias python='python3.6'
+alias p='bpython'
 alias emacs='emacs-25.3'
 alias ps='ps -a'
 alias grepp='grep -rine'
 alias c='clear'
 alias cat='cat -n'
-
