@@ -3,3 +3,8 @@ ac-comphist.dat
 .save*
 archive-contents
 .DS_Store
+.emacs.d/.python-environments/default/*
+*.elc
+*.pyc
+*.o
+*.exe
