@@ -28,7 +28,7 @@
      ("melpa" . "https://melpa.org/packages/"))))
  '(package-selected-packages
    (quote
-    (swift-mode neotree ob-php org-bullets magit php-mode rainbow-mode js2-mode web-mode ac-html processing-mode multiple-cursors yasnippet which-key try smart-mode-line-powerline-theme org jedi hungry-delete flycheck expand-region counsel)))
+    (json-mode swift-mode neotree ob-php org-bullets magit php-mode rainbow-mode js2-mode web-mode ac-html processing-mode multiple-cursors yasnippet which-key try smart-mode-line-powerline-theme org jedi hungry-delete flycheck expand-region counsel)))
  '(php-mode-coding-style (quote symfony2))
  '(python-indent-guess-indent-offset-verbose nil)
  '(python-shell-interpreter "python3.6")
@@ -161,7 +161,7 @@
 (global-set-key (kbd "C-x l") 'mc/edit-lines)
 (global-set-key (kbd "C-x .") 'mc/mark-next-like-this)
 (global-set-key (kbd "C-x ,") 'mc/mark-previous-like-this)
-(global-set-key (kbd "C-x a") 'mc/mark-all-like-t)
+(global-set-key (kbd "C-x a") 'mc/mark-all-like-this)
 
 (font-lock-add-keywords 'python-mode
     '(("\\<[\\+-]?[0-9]+\\(.[0-9]+\\)?\\>" 0 'font-lock-constant-face)
