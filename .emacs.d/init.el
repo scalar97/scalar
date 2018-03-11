@@ -161,7 +161,7 @@
 (global-set-key (kbd "C-x l") 'mc/edit-lines)
 (global-set-key (kbd "C-x .") 'mc/mark-next-like-this)
 (global-set-key (kbd "C-x ,") 'mc/mark-previous-like-this)
-(global-set-key (kbd "C-x a") 'mc/mark-all-like-t)
+(global-set-key (kbd "C-x a") 'mc/mark-all-like-this)
 
 (font-lock-add-keywords 'python-mode
     '(("\\<[\\+-]?[0-9]+\\(.[0-9]+\\)?\\>" 0 'font-lock-constant-face)
