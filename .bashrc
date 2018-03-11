@@ -25,7 +25,7 @@ export LSCOLORS=ExFxBxDxCxegedabagacad
 export EDITOR="emacs-25.3"
 export PATH="$PATH:~/.local/bin/:."
 # export PS1='[\[\033[1;35m\]\u\[\033[01;32m\]@\h\[\033[m\] \[\033[1;33m\]\W\[\033[1;30m\] $(date '+%I:%M')\[\033[0;m\]]\$ '
-export PS1='\[\033[1;31m\]\W \[\033[0;m\]\$ '
+export PS1='\[\033[1;31m\]\W \[\033[1;30;m\]\$\[\033[0;m\] '
 export PS2="$ "
 
 # set global variable based on OS in (LINUX, DARWIN)
@@ -108,9 +108,9 @@ function git_do() {
 # get the status of all the remote repositories in a given folder
 function git_dir() {
     # check if current directory is already a branch or run through every subdirectory.
-    [ -d ".git" ] && git $1 || {
+    [ -d ".git" ] && { [ $# -eq 1 ] && $1 || $1 | $2 ;} || {
 	  for dir in */ ; do
-	      [ -d "$dir/.git" ] && echo && builtin cd $dir &&  git $1
+	      [ -d "$dir/.git" ] && echo && builtin cd $dir && [ $# -eq 1 ] && $1 || $1 | $2 
 	      [ -d ".git" ] && builtin cd ../  # only cd .. if builtin cd $dir happened 
 	  done
     }

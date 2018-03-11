@@ -8,3 +8,4 @@ archive-contents
 *.pyc
 *.o
 *.exe
+*.mc-lists.el

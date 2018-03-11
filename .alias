@@ -25,12 +25,11 @@ fi
 # these swap functions are used with aliaces
 swap() { $1 $3; $2;}
 swap_pipe() { $1 $3| $2;}
-
 # function aliaces
 cag() { cat "$1" | grep "$2"; } # cat and grep a keyword
 hig() { history | grep $1; }
 function ga() { git add $@ && git status ;}
-function gl() { git log --graph --pretty=format:'%Cred%h%Creset - %C(bold green)(%cr)%Creset%C(yellow) : %s %C(bold blue)%d%Creset' $@ ;}
+function gl() { git log --graph --pretty=format:'%Cred%h%Creset - %C(bold green)(%cr)%Creset%C(yellow) : %s %C(bold blue)%d%Creset' --abbrev-commit  $@ ;}
 function grepp() { grep -rine $([ $# -eq 1 ] && echo  "$1 ." || echo $@);}
 cd() { [ $# -eq 0 ] && builtin cd ~  ||  { builtin cd "$1" && ls -FG;} }
 
@@ -55,9 +54,11 @@ alias gs='git status'
 alias gu='git pull'
 alias gp='git push'
 alias gpo='git push origin master && github'
+alias gaa='git add --all'
 alias gd='git diff'
-alias gss='git_dir status' # gets the status of all remote repos from specified folder
-alias gpp='git_dir pull'   # pull all directories at once.
+alias gss='git_dir "git status"' # gets the status of all remote repos from specified folder
+alias gpp='git_dir "git pull"'   # pull all directories at once.
+alias gll='git_dir "gl" "head -n 1"'   # pull all directories at once.
 alias ..='cd ..'
 alias ...='cd ../..'
 alias .b='. ~/.bashrc' # on Darwin, .bashrc is a symlink to .bash_profile
