@@ -31,13 +31,16 @@ cag() { cat "$1" | grep "$2"; } # cat and grep a keyword
 hig() { history | grep $1; }
 function ga() { git add $@ && git status ;}
 function gl() { git log --graph --pretty=format:'%Cred%h%Creset - %C(bold green)(%cr)%Creset%C(yellow) : %s %C(bold blue)%d%Creset' $@ ;}
+function grepp() { grep -rine $([ $# -eq 1 ] && echo  "$1 ." || echo $@);}
 cd() { [ $# -eq 0 ] && builtin cd ~  ||  { builtin cd "$1" && ls -FG;} }
 
 # custom aliaces
+alias emacs='emacs-25.3'
+alias python='python3.6'
 alias ll='ls -alFgG'
 alias la='ls -AF'
 alias l='ls -CGF'
-alias grep='grep --color=auto'
+alias grep='grep --color=always'
 alias gdb='gdb -q'
 alias calc="sage"
 alias bc='bc -q'
@@ -65,8 +68,7 @@ alias y='youtube'
 alias wiki='google wikipedia'
 alias kl='kill %1' 
 alias p='bpython'
-alias emacs='emacs-25.3'
 alias ps='ps -a'
-alias grepp='grep -rine'
 alias c='clear'
 alias cat='cat -n'
+alias code='python /Users/tati/Desktop/GIT/HTTP-Status-Code-CLI/http_status_code_parser.py'
