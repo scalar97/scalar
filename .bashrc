@@ -24,7 +24,8 @@ export CDPATH=".:~:~/Desktop/:~/Desktop/GIT/"
 export LSCOLORS=ExFxBxDxCxegedabagacad
 export EDITOR="emacs-25.3"
 export PATH="$PATH:~/.local/bin/:."
-export PS1='[\[\033[1;35m\]\u\[\033[01;32m\]@\h\[\033[m\] \[\033[1;33m\]\W\[\033[1;30m\] $(date '+%I:%M')\[\033[0;m\]]\$ '
+# export PS1='[\[\033[1;35m\]\u\[\033[01;32m\]@\h\[\033[m\] \[\033[1;33m\]\W\[\033[1;30m\] $(date '+%I:%M')\[\033[0;m\]]\$ '
+export PS1='\[\033[1;31m\]\W \[\033[0;m\]\$ '
 export PS2="$ "
 
 # set global variable based on OS in (LINUX, DARWIN)
