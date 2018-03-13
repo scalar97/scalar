@@ -20,16 +20,15 @@ shopt -s histappend
 # partial path creation
 
 get_ps1() {
-    
 	if [[ "$PWD" = "$HOME"* ]]; then
 	    # nested working directory from home directory
-	    ps1=$(echo "$(pwd | cut -d '/' -f-5)..$(basename $PWD)")
+	    ps1=$(echo "$(pwd | cut -d '/' -f-5)")
 	    ps1=$(echo "${ps1//$HOME/~}")
 	else
 	    # nested paths down outside the home directory
-	    ps1="$(pwd | cut -d '/' -f-3)..$(basename $PWD)"	
+	    ps1="$(pwd | cut -d '/' -f-3)"
 	fi
-	echo $ps1
+	echo -e "${ps1}.."
 }
 # set encvironemental variables.
 export CLICOLOR=1
@@ -37,9 +36,7 @@ export PATH=".:$PATH:~/.local/bin/:~"
 export CDPATH=".:~:~/Desktop/:~/Desktop/GIT/"
 export LSCOLORS=ExFxBxDxCxegedabagacad
 export EDITOR="emacs-25.3"
-# export PS1='[\[\033[1;35m\]\u\[\033[01;32m\]@\h\[\033[m\] \[\033[1;33m\]\W\[\033[1;30m\] $(date '+%I:%M')\[\033[0;m\]]\$ '
-# export PS1='\[\033[1;31m\]\W \[\033[1;30;m\]\$\[\033[0;m\] '
-export PS1='\[\033[1;31m\]$(get_ps1) \[\033[1;30;m\]\$\[\033[0;m\] '
+export PS1='\[\033[1;30m\]$(get_ps1)\033[1;31m$(basename $PWD) \033[1;30;m\$\033[0;m '
 export PS2="$ "
 
 # set global variable based on OS in (LINUX, DARWIN)
@@ -124,7 +121,7 @@ function git_dir() {
     # check if current directory is already a branch or run through every subdirectory.
     [ -d ".git" ] && { [ $# -eq 1 ] && $1 || $1 | $2 ;} || {
 	  for dir in */ ; do
-	      [ -d "$dir/.git" ] && echo && builtin cd $dir && [ $# -eq 1 ] && $1 || $1 | $2 
+	      [ -d "$dir/.git" ] && cd $dir >/dev/null && printf "\n\033[1;33m$(basename $PWD)\033[0m\n"               && [ $# -eq 1 ] && $1 || $1 | $2 
 	      [ -d ".git" ] && builtin cd ../  # only cd .. if builtin cd $dir happened 
 	  done
     }
