@@ -250,7 +250,7 @@
 
 ;;; JAVA MODE
 (add-hook 'java-mode-hook (lambda ()
-	(setq c-basic-offset 4
+	(setq indent-tabs-mode t
 		tab-width 4
 		indent-tabs-mode t)))
 
@@ -269,6 +269,11 @@
 	("\\([ #a-zA-Z]*[[:alpha:]][^,{]*\\)" 1 compilation-warning-face) ; id, class, tags
 	("\\([:,\\*%]\\)" 1 'font-lock-builtin-face))); misc
 
+
+;;; GO MODE
+(add-hook 'go-mode-hook
+      (lambda ()
+        (setq tab-width 4)))
 
 
 ;;; Commentary:

@@ -34,7 +34,6 @@ get_ps1() {
 # set encvironemental variables.
 export CLICOLOR=1
 export PATH=".:$PATH:~/.local/bin/:~"
-export GOPATH="$HOME/go"
 export CDPATH=".:~:~/Desktop/:~/Desktop/GIT/"
 export LSCOLORS=ExFxBxDxCxegedabagacad
 export EDITOR="emacs-25.3"
@@ -120,7 +119,7 @@ function git_do() {
 	[[ "$1" = *"commit"* ]] && echo  "$1 '$2'' && git push'" | jump_run # will print error if no branch was found
     fi
 }
-# get the status of all the remote repositories in a given folder
+# pulls, get the status, or log  of all the remote repositories in a given folder at once
 function git_dir() {
     # check if current directory is already a branch or run through every subdirectory.
     [ -d ".git" ] && { [ $# -eq 1 ] && $1 || $1 | $2 ;} || {
