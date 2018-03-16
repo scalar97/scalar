@@ -23,7 +23,7 @@ get_ps1() {
 	if [[ "$PWD" = "$HOME"* ]]; then
 	    # nested working directory from home directory
 	    ps1=$(echo "$(pwd | cut -d '/' -f-5)")
-	    ps1=$(echo "${ps1//$HOME/~}")
+	    ps1=$(echo "${ps1//$HOME/\~}")
 	else
 	    # nested paths down outside the home directory
 	    ps1="$(pwd | cut -d '/' -f-3)"
@@ -83,13 +83,6 @@ google()
     $OPEN "https://www."$([[ "$1" == '-youtube' ]] &&
 	echo -n "youtube.com/results?search_query" ||
 	echo -n "google.com/search?q" ; echo "=$search"); 
-}
-#compile java main package later will look for spacific package
-function jac() {
-    ret=$([ $(basename $PWD) == "java" ] && echo 0 || echo 1)
-    [ $ret == "0" ] || pushd . > /dev/null  && builtin cd ~/Desktop/GIT/Java-OOP/java
-    rm -f ie/dit/*.class && javac ie/dit/*.java && java ie.dit.Main
-    [ $ret == "0" ] || popd > /dev/null
 }
 # go up the directory tree to find a .git folder, return if / is reached.
 function jump_run() {
