@@ -20,15 +20,10 @@ shopt -s histappend
 # partial path creation
 
 get_ps1() {
-	if [[ "$PWD" = "$HOME"* ]]; then
-	    # nested working directory from home directory
-	    ps1=$(echo "$(pwd | cut -d '/' -f-5)")
-	    ps1=$(echo "${ps1//$HOME/\~}")
-	else
-	    # nested paths down outside the home directory
-	    ps1="$(pwd | cut -d '/' -f-3)"
-	fi
-	echo -e "${ps1}.."
+    # nested working directory from home directory or outside and no ~ expansion
+    [[ "$PWD" = "$HOME"* ]] && escape=5 || escape=3
+    ps1="$(pwd | cut -d '/' -f-$escape)"
+    [[ $(uname) = "Linux" ]] && echo -e "${ps1//$HOME/\~}" ||echo -e "${ps1//$HOME/~}"
 }
 # set encvironemental variables.
 export CLICOLOR=1
@@ -36,7 +31,7 @@ export PATH=".:$PATH:~/.local/bin/:~"
 export CDPATH=".:~:~/Desktop/:~/Desktop/GIT/"
 export LSCOLORS=ExFxBxDxCxegedabagacad
 export EDITOR="emacs-25.3"
-export PS1='\[\033[1;30m\]$(get_ps1)\033[1;31m$(basename $PWD) \033[1;30;m\$\033[0;m '
+export PS1='\[\033[1;30m\]$(get_ps1)..\033[1;31m$(basename $PWD) \033[1;30;m\$\033[0;m '
 export PS2="$ "
 
 # set global variable based on OS in (LINUX, DARWIN)
