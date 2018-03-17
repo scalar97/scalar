@@ -42,7 +42,7 @@ if test $(uname) = 'Linux'; then
     # enable color support on Arch-Linux
     if [ -x /usr/bin/dircolors ]; then
       test -r ~/.dircolors && eval "$(dircolors -b ~/.dircolors)" \
-	                   || eval "$(dircolors -b)"
+	  || eval "$(dircolors -b)"
     fi
     # eneble auto completion
     if [ -f /usr/share/bash-completion/bash_completion ]; then
@@ -77,7 +77,7 @@ google()
     done
     $OPEN "https://www."$([[ "$1" == '-youtube' ]] &&
 	echo -n "youtube.com/results?search_query" ||
-	echo -n "google.com/search?q" ; echo "=$search"); 
+	echo -n "google.com/search?q" ; echo "=$search");
 }
 # go up the directory tree to find a .git folder, return if / is reached.
 function jump_run() {
@@ -85,23 +85,22 @@ function jump_run() {
     while [ ! -d ".git/" ]  && [ $(basename $PWD) != '/' ] ; do
 	builtin cd ../
     done
-    echo && pwd
-    
-    # run the comand passsed if a remote repository was found
-    [ $(basename $PWD) != "/" ] && echo $1 && popd > /dev/null && return 0
+   # run the comand passsed if a remote repository was found
+    [ $(basename $PWD) != "/" ] && eval $@ && popd > /dev/null && return 0
     popd > /dev/null && echo "Error: no remote branch found." && return 1
 }
 # now uses the same funtion to perfom different git command rather having a custom for each
 function git_do() {
     if [ -d ".git" ]; then
-        case "$1" in
-	    *"open"*) $OPEN $2$(basename $PWD) ;;
+      echo here0
+      case "$1" in
+	    *"github"*) github ;;
 	    *"commit"*) $1 "$2" && git push;;
-	esac
+      esac
     else
 	# if no repository was found. simply open github main page
-        [[ "$1" = *"open"* ]] && jump_run '$1 $2$(basename $PWD)' >/dev/null || $1 $2
-	[[ "$1" = *"commit"* ]] && echo  "$1 '$2'' && git push'" | jump_run # will print error if no branch was found
+	[[ "$1" = "github" ]] && jump_run github || echo github
+	[[ "$1" = *"commit"* ]] && jump_run "${1} '${2}' && git push" # will print error if no branch was found
     fi
 }
 # pulls, get the status, or log  of all the remote repositories in a given folder at once

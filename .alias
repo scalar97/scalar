@@ -30,6 +30,10 @@ cag() { cat "$1" | grep "$2"; } # cat and grep a keyword
 hig() { history | grep $1; }
 function ga() { git add $@ && git status -s;}
 function gl() { git log --graph --pretty=format:'%Cred%h%Creset - %C(bold green)(%cr)%Creset%C(yellow) : %s %C(bold blue)%d%Creset' --abbrev-commit  $@ ;}
+function github() {
+    repository="$([ -d ".git" ] && echo $(basename $PWD) || echo "")"
+    $OPEN "https://github.com/tati-z/"$repository
+}
 function grepp() { grep -rine $([ $# -eq 1 ] && echo  "$1 ." || echo $@);}
 cd() { [ $# -eq 0 ] && builtin cd ~  ||  { builtin cd "$1" && ls -FG;} }
 
@@ -47,7 +51,7 @@ alias top='htop'
 alias locate='swap_pipe "locate" "more" $1'
 alias j='swap_pipe "joke.sh" "less" 8'
 alias apropos='swap_pipe "apropos" "more" $1'
-alias gh='git_do "$OPEN" "https://github.com/tati-z/"'
+alias gh='git_do "github"'
 alias gc='git_do "git commit -m"' #second argument will be added at the command line
 alias gr='git rm -f'
 alias gs='git status -s'
