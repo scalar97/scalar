@@ -18,6 +18,7 @@
    (quote
     ("b9e9ba5aeedcc5ba8be99f1cc9301f6679912910ff92fdf7980929c2fc83ab4d" "a27c00821ccfd5a78b01e4f35dc056706dd9ede09a8b90c6955ae6a390eb1c1e" "3c83b3676d796422704082049fc38b6966bcad960f896669dfc21a7a37a748fa" default)))
  '(highlight-nonselected-windows t)
+ '(jdee-server-dir "~/.jars")
  '(js2-highlight-external-variables nil)
  '(js2-idle-timer-delay 0)
  '(js2-include-node-externs t)
@@ -28,7 +29,7 @@
      ("melpa" . "https://melpa.org/packages/"))))
  '(package-selected-packages
    (quote
-    (go-mode json-mode swift-mode neotree ob-php org-bullets magit php-mode rainbow-mode js2-mode web-mode ac-html processing-mode multiple-cursors yasnippet which-key try smart-mode-line-powerline-theme org jedi hungry-delete flycheck expand-region counsel)))
+    (jdee go-mode json-mode swift-mode neotree ob-php org-bullets magit php-mode rainbow-mode js2-mode web-mode ac-html processing-mode multiple-cursors yasnippet which-key try smart-mode-line-powerline-theme org jedi hungry-delete flycheck expand-region counsel)))
  '(php-mode-coding-style (quote symfony2))
  '(python-indent-guess-indent-offset-verbose nil)
  '(python-shell-interpreter "python3.6")

@@ -8,7 +8,6 @@
 # for setting history length see HISTSIZE and HISTFILESIZE in bash(1)
 HISTSIZE=1000
 HISTFILESIZE=2000
-
 # disable adding duplicated lines or starting with space
 HISTCONTROL=ignoreboth
 
@@ -85,22 +84,23 @@ function jump_run() {
     while [ ! -d ".git/" ]  && [ $(basename $PWD) != '/' ] ; do
 	builtin cd ../
     done
-   # run the comand passsed if a remote repository was found
+    
+    # run the comand passsed if a remote repository was found
     [ $(basename $PWD) != "/" ] && eval $@ && popd > /dev/null && return 0
     popd > /dev/null && echo "Error: no remote branch found." && return 1
 }
 # now uses the same funtion to perfom different git command rather having a custom for each
 function git_do() {
     if [ -d ".git" ]; then
-      echo here0
       case "$1" in
-	    *"github"*) github ;;
 	    *"commit"*) $1 "$2" && git push;;
+	    "githu"*) github ;;
       esac
     else
 	# if no repository was found. simply open github main page
-	[[ "$1" = "github" ]] && jump_run github || echo github
-	[[ "$1" = *"commit"* ]] && jump_run "${1} '${2}' && git push" # will print error if no branch was found
+	[[ "$1" = *"commit"* ]] && jump_run "${1} '${2}' && git push" && return 0
+	[[ "$1" = "githu"* ]] && eval jump_run github && return 0 || github && return 1
+
     fi
 }
 # pulls, get the status, or log  of all the remote repositories in a given folder at once
