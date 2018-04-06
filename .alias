@@ -80,3 +80,4 @@ alias code='python /Users/tati/Desktop/GIT/HTTP-Status-Code-CLI/http_status_code
 alias todo='/bin/cat ~/.todo'
 alias todoa='~/.local/bin/todo.sh APP'
 alias todot='~/.local/bin/todo.sh TASK'
+alias todof='~/.local/bin/todo.sh FEATURE'

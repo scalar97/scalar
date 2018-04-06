@@ -7,12 +7,14 @@
       :major-mode jdee-mode
       :tags 
         '( ("java.util.Hashtable" include nil nil [1 28])
-            ("java.util.Arrays" include nil nil [29 53]))          
+            ("java.util.Arrays" include nil nil [29 53])
+            ("java.util.Comparator" include nil nil [54 82])
+            ("java.lang.Comparable" include nil nil [83 111]))          
       :file "Heap.java"
-      :pointmax 2411
-      :fsize 2410
-      :lastmodtime '(23216 53537 510799 550000)
-      :unmatched-syntax '((BRACE_BLOCK 100 . 2410) (RSHIFT 97 . 99) (IDENTIFIER 96 . 97) (LT 95 . 96) (IDENTIFIER 84 . 94) (EXTENDS 76 . 83) (IDENTIFIER 74 . 75) (PUBLIC 55 . 61) (LT 73 . 74) (BRACE_BLOCK 100 . 2409) (RSHIFT 97 . 99) (IDENTIFIER 96 . 97) (LT 95 . 96) (IDENTIFIER 84 . 94) (EXTENDS 76 . 83) (IDENTIFIER 74 . 75) (PUBLIC 55 . 61) (LT 73 . 74) (BRACE_BLOCK 100 . 2405) (RSHIFT 97 . 99) (IDENTIFIER 96 . 97) (LT 95 . 96) (IDENTIFIER 84 . 94) (EXTENDS 76 . 83) (IDENTIFIER 74 . 75) (PUBLIC 55 . 61) (LT 73 . 74) (BRACE_BLOCK 100 . 2404) (RSHIFT 97 . 99) (IDENTIFIER 96 . 97) (LT 95 . 96) (IDENTIFIER 84 . 94) (EXTENDS 76 . 83) (IDENTIFIER 74 . 75) (PUBLIC 55 . 61) (LT 73 . 74) (BRACE_BLOCK 100 . 2409) (RSHIFT 97 . 99) (IDENTIFIER 96 . 97) (LT 95 . 96) (IDENTIFIER 84 . 94) (EXTENDS 76 . 83) (IDENTIFIER 74 . 75) (PUBLIC 55 . 61) (LT 73 . 74) (BRACE_BLOCK 100 . 2410) (RSHIFT 97 . 99) (IDENTIFIER 96 . 97) (LT 95 . 96) (IDENTIFIER 84 . 94) (EXTENDS 76 . 83) (IDENTIFIER 74 . 75) (PUBLIC 55 . 61) (LT 73 . 74) (BRACE_BLOCK 100 . 2408) (RSHIFT 97 . 99) (IDENTIFIER 96 . 97) (LT 95 . 96) (IDENTIFIER 84 . 94) (EXTENDS 76 . 83) (IDENTIFIER 74 . 75) (PUBLIC 55 . 61) (LT 73 . 74) (BRACE_BLOCK 100 . 2405) (RSHIFT 97 . 99) (IDENTIFIER 96 . 97) (LT 95 . 96) (IDENTIFIER 84 . 94) (EXTENDS 76 . 83) (IDENTIFIER 74 . 75) (PUBLIC 55 . 61) (LT 73 . 74) (BRACE_BLOCK 100 . 2404) (RSHIFT 97 . 99) (IDENTIFIER 96 . 97) (LT 95 . 96) (IDENTIFIER 84 . 94) (EXTENDS 76 . 83) (IDENTIFIER 74 . 75) (PUBLIC 55 . 61) (LT 73 . 74) (BRACE_BLOCK 100 . 2405) (RSHIFT 97 . 99) (IDENTIFIER 96 . 97) (LT 95 . 96) (IDENTIFIER 84 . 94) (EXTENDS 76 . 83) (IDENTIFIER 74 . 75) (PUBLIC 55 . 61) (LT 73 . 74)))
+      :pointmax 3969
+      :fsize 3968
+      :lastmodtime '(23221 37657 306095 425000)
+      :unmatched-syntax '((BRACE_BLOCK 135 . 3968) (GT 133 . 134) (IDENTIFIER 132 . 133) (PUBLIC 113 . 119) (LT 131 . 132) (BRACE_BLOCK 135 . 3969) (GT 133 . 134) (IDENTIFIER 132 . 133) (PUBLIC 113 . 119) (LT 131 . 132) (BRACE_BLOCK 135 . 3968) (GT 133 . 134) (IDENTIFIER 132 . 133) (PUBLIC 113 . 119) (LT 131 . 132)))
     (semanticdb-table "semanticdb-table"
       :major-mode jdee-mode
       :tags 
