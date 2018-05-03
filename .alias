@@ -34,8 +34,18 @@ function github() {
     repository="$([ -d ".git" ] && echo $(basename $PWD) || echo "")"
     $OPEN "https://github.com/tati-z/"$repository
 }
+function gc() {
+    git_do "git commit -m " "$@" #second argument will be added at the command line
+    echo -e "\n\n"
+    git status -s
+    echo
+}
+function gd(){
+    git diff $@ && git status -s
+}
+
 function grepp() { grep -rine $([ $# -eq 1 ] && echo  "$1 ." || echo $@);}
-cd() { [ $# -eq 0 ] && builtin cd ~  ||  { builtin cd "$1" && ls -FG;} }
+cd() { [ $# -eq 0 ] && builtin cd ~  ||  { builtin cd "$1" && echo && ls -laFG && echo;} }
 
 # custom aliaces
 alias emacs='emacs-25.3'
@@ -52,14 +62,11 @@ alias locate='swap_pipe "locate" "more" $1'
 alias j='swap_pipe "joke.sh" "less" 8'
 alias apropos='swap_pipe "apropos" "more" $1'
 alias gh='git_do "github"'
-alias gc='git_do "git commit -m"' #second argument will be added at the command line
 alias gr='git rm -f'
 alias gs='git status -s'
 alias gu='git pull'
 alias gp='git push'
-alias gpo='git push origin master && gh'
 alias gaa='git add --all && git status -s'
-alias gd='git diff'
 alias gss='git_dir "git status -s"' # gets the status of all remote repos from specified folder
 alias gpp='git_dir "git pull"'   # pull all directories at once.
 alias gll='git_dir "gl" "head -n 1"'   # pull all directories at once.
@@ -78,6 +85,7 @@ alias c='clear'
 alias cat='cat -n'
 alias code='python /Users/tati/Desktop/GIT/HTTP-Status-Code-CLI/http_status_code_parser.py'
 alias todo='/bin/cat ~/.todo'
-alias todoa='~/.local/bin/todo.sh APP'
-alias todot='~/.local/bin/todo.sh TASK'
-alias todof='~/.local/bin/todo.sh FEATURE'
+alias ta='~/.local/bin/todo.sh APP'
+alias tt='~/.local/bin/todo.sh TASK'
+alias tf='~/.local/bin/todo.sh FEATURE'
+alias th='~/.local/bin/todo.sh HOWTO'
