@@ -30,7 +30,7 @@ export PATH=".:$PATH:~/.local/bin/:~"
 export CDPATH=".:~:~/Desktop/:~/Desktop/GIT/"
 export LSCOLORS=ExFxBxDxCxegedabagacad
 export EDITOR="emacs-25.3"
-export PS1='\[\033[1;30m\]$(get_ps1)..\033[1;31m$(basename $PWD) \033[1;30;m\$\033[0;m '
+export PS1='\[\033[1;30m\]$(get_ps1)..\[\033[1;31m\]$(basename $PWD) \[\033[1;30;m\]\$\[\033[0;m\] '
 export PS2="$ "
 
 # set global variable based on OS in (LINUX, DARWIN)
