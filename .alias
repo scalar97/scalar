@@ -35,7 +35,7 @@ function github() {
     $OPEN "https://github.com/tati-z/"$repository
 }
 function gc() {
-    git_do "git commit -m " "$@" #second argument will be added at the command line
+    git_do "git commit -m " "$(echo $@)" #second argument will be added at the command line
     echo -e "\n\n"
     git status -s
     echo
