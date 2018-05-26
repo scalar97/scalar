@@ -29,7 +29,7 @@
      ("melpa" . "https://melpa.org/packages/"))))
  '(package-selected-packages
    (quote
-    (go-mode json-mode swift-mode neotree ob-php org-bullets magit php-mode rainbow-mode js2-mode web-mode ac-html processing-mode multiple-cursors yasnippet which-key try smart-mode-line-powerline-theme org jedi hungry-delete flycheck expand-region counsel)))
+    (smooth-scrolling go-complete go-autocomplete go-mode json-mode swift-mode neotree ob-php org-bullets magit php-mode rainbow-mode js2-mode web-mode ac-html processing-mode multiple-cursors yasnippet which-key try smart-mode-line-powerline-theme org jedi hungry-delete flycheck expand-region counsel)))
  '(php-mode-coding-style (quote symfony2))
  '(python-indent-guess-indent-offset-verbose nil)
  '(python-shell-interpreter "python3.6")
@@ -127,7 +127,7 @@
 (ivy-mode 1)
 (setq ivy-use-virtual-buffers t)
 (setq ivy-display-style 'fancy)
-
+(require 'go-autocomplete)
 (require 'auto-complete-config)
 (ac-config-default)
 (define-key ac-mode-map (kbd "TAB") nil)
@@ -179,12 +179,20 @@
 
 ;;; TERM MODE : enable mouse support when using the terminal
 
-(add-hook 'term-mode
-	  (lambda ()
-	    (setq xterm-mouse-mode t)))
-(eval-after-load 'term-mode
-  '((define-key [mouse-4] (lambda ()(interactive) '(scroll-down 1)))
-    (define-key [mouse-5] (lambda ()(interactive) '(scroll-up 1)))))
+(xterm-mouse-mode t)
+
+(require 'smooth-scrolling)
+(smooth-scrolling-mode 1)
+(setq smooth-scroll-margin 8)
+
+(require 'mouse) ;; needed for iterm2 compatibility
+(global-set-key [mouse-4] '(lambda ()
+                           (interactive)
+                           (scroll-down 1)))
+(global-set-key [mouse-5] '(lambda ()
+                           (interactive)
+                           (scroll-up 1)))
+
 ;; split the window in two only when in terminal
 
 (defun my-term ()
@@ -210,7 +218,6 @@
    (interactive)
    (flycheck-mode -1))
 (add-hook 'python-mode-hook' disable-flycheck-mode)
-
 ;; jedi on dot autocompletion and python documetation
 (add-hook 'python-mode-hook 'jedi:setup)
 (setq jedi:complete-on-dot t)
@@ -225,6 +232,14 @@
     '(("\\<[\\+-]?[0-9]+\\(.[0-9]+\\)?\\>" 0 'font-lock-constant-face)
       ("\\([][{}()~^<>:=,.\\+*/%-]\\)" 1 'font-lock-negation-char-face)
       ("\\<\\([a-zA-Z_]*\\)\\s-*\(" 1 'font-lock-function-name-face)))
+
+;;; GO MODE
+(add-hook 'go-mode-hook
+      (lambda ()
+        (setq tab-width 4)))
+(when (memq window-system '(mac ns))
+  (exec-path-from-shell-initialize)
+  (exec-path-from-shell-copy-env "GOPATH"))
 
 ;;; ORG MODE
 (setq org-src-fontify-natively t)
@@ -269,12 +284,6 @@
 	(":\\([ .a-zA-Z0-9]*[[:alpha:]][^,;{]*\\)" 1 font-lock-negation-char-face) ; values after semi colon
 	("\\([ #a-zA-Z]*[[:alpha:]][^,{]*\\)" 1 compilation-warning-face) ; id, class, tags
 	("\\([:,\\*%]\\)" 1 'font-lock-builtin-face))); misc
-
-
-;;; GO MODE
-(add-hook 'go-mode-hook
-      (lambda ()
-        (setq tab-width 4)))
 
 
 ;;; Commentary:
