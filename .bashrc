@@ -43,8 +43,7 @@ if test $(uname) = 'Linux'; then
     OPEN="xdg-open"
     # enable color support on Arch-Linux
     if [ -x /usr/bin/dircolors ]; then
-      test -r ~/.dircolors && eval "$(dircolors -b ~/.dircolors)" \
-	  || eval "$(dircolors -b)"
+      test -r ~/.dircolors && eval "$(dircolors -b ~/.dircolors)" || eval "$(dircolors -b)"
     fi
     # eneble auto completion
     if [ -f /usr/share/bash-completion/bash_completion ]; then
@@ -109,9 +108,9 @@ function git_do() {
 # pulls, get the status, or log  of all the remote repositories in a given folder at once
 function git_dir() {
     # check if current directory is already a branch or run through every subdirectory.
-    [ -d ".git" ] && { [ $# -eq 1 ] && $1 || $1 | $2 ;} || {
+    [ -d ".git" ] && { ([ $# -eq 1 ] && $1) || ($1 | $2) ;} || {
 	  for dir in */ ; do
-	      [ -d "$dir/.git" ] && cd $dir >/dev/null && printf "\n\033[1;33m$(basename $PWD)\033[0m\n"               && [ $# -eq 1 ] && $1 || $1 | $2 
+	      [ -d "$dir/.git" ] && cd $dir >/dev/null && printf "\n\033[1;33m$(basename $PWD)\033[0m\n" && (([ $# -eq 1 ] && $1) || ($1 | $2 ))
 	      [ -d ".git" ] && builtin cd ../  # only cd .. if builtin cd $dir happened 
 	  done
     }
