@@ -29,7 +29,7 @@
      ("melpa" . "https://melpa.org/packages/"))))
  '(package-selected-packages
    (quote
-    (smooth-scrolling go-complete go-autocomplete go-mode json-mode swift-mode neotree ob-php org-bullets magit php-mode rainbow-mode js2-mode web-mode ac-html processing-mode multiple-cursors yasnippet which-key try smart-mode-line-powerline-theme org jedi hungry-delete flycheck expand-region counsel)))
+    (highlight-symbol smooth-scrolling go-complete go-autocomplete go-mode json-mode swift-mode neotree ob-php org-bullets magit php-mode rainbow-mode js2-mode web-mode ac-html processing-mode multiple-cursors yasnippet which-key try smart-mode-line-powerline-theme org jedi hungry-delete flycheck expand-region counsel)))
  '(php-mode-coding-style (quote symfony2))
  '(python-indent-guess-indent-offset-verbose nil)
  '(python-shell-interpreter "python3.6")
@@ -60,7 +60,8 @@
  '(font-lock-type-face ((t (:foreground "color-38" :underline t :weight ultra-bold))))
  '(font-lock-variable-name-face ((t (:foreground "color-166"))))
  '(highlight ((t (:background "color-236"))))
- '(ivy-minibuffer-match-face-1 ((t (:background "brightblue" :foreground "black"))))
+ '(ivy-highlight-face ((t (:background "brightyellow"))))
+ '(ivy-minibuffer-match-face-1 ((t (:background "white" :foreground "black"))))
  '(ivy-minibuffer-match-face-2 ((t (:background "cyan" :foreground "color-16" :weight bold))))
  '(ivy-minibuffer-match-face-3 ((t (:background "#ffffff" :foreground "color-16" :weight bold))))
  '(js2-function-call ((t (:foreground "color-162" :slant italic :weight semi-bold))))
@@ -73,13 +74,12 @@
  '(which-key-command-description-face ((t (:inherit font-lock-function-name-face :foreground "color-23"))))
  '(widget-field ((t (:background "color-235" :foreground "white"))))
  '(widget-inactive ((t (:distant-foreground "black" :foreground "color-250"))))
- '(yas-field-highlight-face ((t ((quote region) nil :background "#000")))))
+ '(yas-field-highlight-face ((t ((quote region) nil :background "#ffda8c")))))
 
 
 ;;; CUSTOM MODELINE THEME
 (setq sml/theme 'automatic)
 (sml/setup)
-
 
 
 ;;; UTILITY SETTINGS
@@ -107,13 +107,30 @@
 (electric-indent-mode t) ; indent automatically
 (visual-line-mode t); better wrapping
 
-
-;;; KEYBOARD LAYOUT ON MAC
+;; use shift up for selection
+ 
 (define-key input-decode-map "\e[1;2A" [S-up])
 (if (equal "xterm" (tty-type))
     (define-key input-decode-map "\e[1;2A" [S-up]))
 (defadvice terminal-init-xterm (after select-shift-up activate)
   (define-key input-decode-map "\e[1;2A" [S-up]))
+
+;; split the window in two only when in terminal
+(defun my-split-window (&optional arg)
+  (interactive "P")
+  (let ((proportion (* (or arg 6) 0.3)))
+    (split-window-horizontally (round (* proportion (window-height))))
+    (other-window 1)
+    (split-window-below)
+    (my-term)
+    (shell)
+    (other-window 1)))
+(global-set-key (kbd "C-x r") 'my-split-window)
+
+(defun my-term ()
+ (interactive)
+ (term "/bin/bash"))
+(global-set-key (kbd "M-r") 'my-term)
 
 ;;; PACKAGE MODE ACTIVATION
 
@@ -125,6 +142,7 @@
 (which-key-mode t)
 (multiple-cursors-mode t)
 (ivy-mode 1)
+(highlight-symbol-mode t)
 (setq ivy-use-virtual-buffers t)
 (setq ivy-display-style 'fancy)
 (require 'go-autocomplete)
@@ -133,6 +151,7 @@
 (define-key ac-mode-map (kbd "TAB") nil)
 (define-key ac-completing-map (kbd "TAB") nil)
 
+(my-split-window)
 
 ;;; GENERAL PURPOSE KEYBINDING
 
@@ -193,14 +212,6 @@
                            (interactive)
                            (scroll-up 1)))
 
-;; split the window in two only when in terminal
-
-(defun my-term ()
- (interactive)
- (term "/bin/bash"))
-(global-set-key (kbd "M-r") 'my-term)
-
-
 ;;; COMMINT -- repeats the last command using arrow keys
 (progn(require 'comint)
       (define-key comint-mode-map (kbd "<up>") 'comint-previous-input)
@@ -234,12 +245,14 @@
       ("\\<\\([a-zA-Z_]*\\)\\s-*\(" 1 'font-lock-function-name-face)))
 
 ;;; GO MODE
+;; split the terminal in 3, run bash and shell in both side terminals
+
 (add-hook 'go-mode-hook
-      (lambda ()
-        (setq tab-width 4)))
+	  (lambda ()
+	    (setq tab-width 4))
 (when (memq window-system '(mac ns))
   (exec-path-from-shell-initialize)
-  (exec-path-from-shell-copy-env "GOPATH"))
+  (exec-path-from-shell-copy-env "GOPATH")))
 
 ;;; ORG MODE
 (setq org-src-fontify-natively t)
@@ -289,4 +302,3 @@
 ;;; Commentary:
 (provide '.emacs)
 ;;; init.el ends here
-(put 'downcase-region 'disabled nil)
