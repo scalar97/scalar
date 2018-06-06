@@ -48,10 +48,8 @@ function gc() {
     gs
     echo
 }
-function gd(){
-    git diff $@ && gs
-}
-
+function gd(){ git diff $@ && gs; }
+function doc(){ godoc $1 | less; }
 function grepp() { grep -rine $([ $# -eq 1 ] && echo  "$1 ." || echo $@);}
 cd() { [ $# -eq 0 ] && builtin cd ~  ||  { builtin cd "$1" && echo && ls -aFG && echo;} }
 
@@ -95,3 +93,5 @@ alias ta='~/.local/bin/todo.sh APP'
 alias tt='~/.local/bin/todo.sh TASK'
 alias tf='~/.local/bin/todo.sh FEATURE'
 alias th='~/.local/bin/todo.sh HOWTO'
+alias bc='python'
+alias ll='l'

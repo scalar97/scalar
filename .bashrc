@@ -27,12 +27,12 @@ get_ps1() {
 # set encvironemental variables.
 export CLICOLOR=1
 export GOPATH="$HOME/Desktop/GIT/go"
-export GOBIN="$HOME/Desktop/GIT/go/bin"
-export PATH=".:$PATH:~/.local/bin/:$GOPATH:$GOBIN"
+export GOBIN="$GOPATH/bin"
+export PATH=".:$PATH:~/.local/bin/:$GOPATH:$GOBIN:/Library/Frameworks/Python.framework/Versions/3.7/bin"
 export CDPATH=".:~:~/Desktop/:~/Desktop/GIT/"
 export LSCOLORS=ExFxBxDxCxegedabagacad
 export EDITOR="emacs-25.3"
-export PS1='\[\033[1;30m\]$(get_ps1)..\033[1;31m$(basename $PWD) \033[1;30;m\$\033[0;m '
+export PS1='\[\033[1;30m\]$(get_ps1)..\[\033[1;31m\]$(basename $PWD) \[\033[1;30;m\]\$\[\033[0;m\] '
 export PS2="$ "
 rc="$HOME/.bashrc" #save the .bashrc file path in a variable for fast typing
 
