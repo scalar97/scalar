@@ -115,8 +115,6 @@ function git_dir() {
 	  done
     }
 }
-function goh() {
-    go help $1 | less
-}
+
 # sources the aliaces
 . ~/.alias

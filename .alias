@@ -50,6 +50,9 @@ function gc() {
 }
 function gd(){ git diff $@ && gs; }
 function doc(){ godoc $1 | less; }
+function run(){
+    [ $# == 0 ] && go run *.go || go run $1 
+}
 function grepp() { grep -rine $([ $# -eq 1 ] && echo  "$1 ." || echo $@);}
 cd() { [ $# -eq 0 ] && builtin cd ~  ||  { builtin cd "$1" && echo && ls -aFG && echo;} }
 

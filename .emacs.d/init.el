@@ -107,8 +107,10 @@
 (electric-indent-mode t) ; indent automatically
 (visual-line-mode t); better wrapping
 
+
+;;; FUNCTIONS
+
 ;; use shift up for selection
- 
 (define-key input-decode-map "\e[1;2A" [S-up])
 (if (equal "xterm" (tty-type))
     (define-key input-decode-map "\e[1;2A" [S-up]))
@@ -127,10 +129,19 @@
     (other-window 1)))
 (global-set-key (kbd "C-x r") 'my-split-window)
 
+;; term
 (defun my-term ()
  (interactive)
  (term "/bin/bash"))
 (global-set-key (kbd "M-r") 'my-term)
+
+
+;; stop emacs promptings
+(require 'cl-lib)
+(defadvice save-buffers-kill-emacs (around no-query-kill-emacs activate)
+  "Prevent annoying \"Active processes exist\" query when you quit Emacs."
+  (cl-letf (((symbol-function #'process-list) (lambda ())))
+    ad-do-it))
 
 ;;; PACKAGE MODE ACTIVATION
 
@@ -249,7 +260,8 @@
 
 (add-hook 'go-mode-hook
 	  (lambda ()
-	    (setq tab-width 4))
+	    (setq tab-width 4)
+	    (local-set-key (kbd "M-l") #'gofmt-before-save))
 (when (memq window-system '(mac ns))
   (exec-path-from-shell-initialize)
   (exec-path-from-shell-copy-env "GOPATH")))
