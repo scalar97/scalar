@@ -1,6 +1,6 @@
-;;; package --- Summary this is my .emacs file
+;; package --- Summary this is .emacs file
 
-;;; PACKAGE INITIALISATION
+;; PACKAGE INITIALISATION
 
 (require 'package)
 ;initialise package.el
@@ -118,16 +118,16 @@
   (define-key input-decode-map "\e[1;2A" [S-up]))
 
 ;; split the window in two only when in terminal
-(defun my-split-window (&optional arg)
-  (interactive "P")
-  (let ((proportion (* (or arg 6) 0.3)))
-    (split-window-horizontally (round (* proportion (window-height))))
-    (other-window 1)
-    (split-window-below)
-    (my-term)
-    (shell)
-    (other-window 1)))
-(global-set-key (kbd "C-x r") 'my-split-window)
+(defun my-split-window (shouldOpenShell)
+"Open program specific shell interpreter.
+SHOULDOPENSHELL: name of shell to be opened."
+  (interactive)
+  (split-window-horizontally)
+    (if (or (functionp shouldOpenShell) (symbolp shouldOpenShell))
+	(progn
+	  (funcall-interactively shouldOpenShell) ; open required shell
+	  (other-window 1))))
+(global-set-key (kbd "C-x C-r") 'my-split-window)
 
 ;; term
 (defun my-term ()
@@ -161,8 +161,6 @@
 (ac-config-default)
 (define-key ac-mode-map (kbd "TAB") nil)
 (define-key ac-completing-map (kbd "TAB") nil)
-
-(my-split-window)
 
 ;;; GENERAL PURPOSE KEYBINDING
 
@@ -206,7 +204,6 @@
 	      (setq flyspell-mode 1)
 	      (toggle-truncate-lines -1)))
 
-
 ;;; TERM MODE : enable mouse support when using the terminal
 
 (xterm-mouse-mode t)
@@ -247,7 +244,7 @@
 (add-hook 'python-mode-hook
       (lambda ()
         (setq indent-tabs-mode t)
-		(setq python-indent 4)
+	(setq python-indent 4)
         (setq tab-width 4)))
 
 (font-lock-add-keywords 'python-mode
@@ -260,12 +257,13 @@
 
 (add-hook 'go-mode-hook
 	  (lambda ()
-	    (setq tab-width 4)
-	    (local-set-key (kbd "M-l") #'gofmt-before-save))
+	    (setq tab-width 4))
 (when (memq window-system '(mac ns))
   (exec-path-from-shell-initialize)
   (exec-path-from-shell-copy-env "GOPATH")))
 
+(add-hook 'go-mode-hook (lambda () (add-hook 'after-save-hook 'gofmt nil 'local)))
+(add-hook 'go-mode-hook (lambda () (add-hook 'after-init-hook (lambda () (my-split-window 'shell)) 'append)))
 ;;; ORG MODE
 (setq org-src-fontify-natively t)
 (add-hook 'org-mode-hook
