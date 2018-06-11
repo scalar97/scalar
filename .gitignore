@@ -10,3 +10,4 @@ archive-contents
 *.exe
 *.mc-lists.el
 .emacs.d/semanticdb/!Users!tati!Desktop!GIT!Algorithm-and-DS-Arena!javaDS!semantic.cache
+*.#*
