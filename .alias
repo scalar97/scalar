@@ -51,7 +51,7 @@ function gc() {
 function gd(){ git diff $@ && gs; }
 function doc(){ godoc $1 | less; }
 function run(){
-    [ $# == 0 ] && go run *.go || go run $1 
+    [ $# == 0 ] && go run *.go || go run "$1.go" 
 }
 function grepp() { grep -rine $([ $# -eq 1 ] && echo  "$1 ." || echo $@);}
 cd() { [ $# -eq 0 ] && builtin cd ~  ||  { builtin cd "$1" && echo && ls -aFG && echo;} }
@@ -60,6 +60,7 @@ cd() { [ $# -eq 0 ] && builtin cd ~  ||  { builtin cd "$1" && echo && ls -aFG &&
 alias emacs='emacs-25.3'
 alias python='python3.6'
 alias l='ls -alFgG'
+alias ll='l'
 alias la='ls -AF'
 alias grep='grep --color=always'
 alias gdb='gdb -q'
@@ -89,7 +90,7 @@ alias kl='kill %1'
 alias p='bpython'
 alias ps='ps -a'
 alias c='clear'
-alias cat='cat -n'
+alias catn='cat -n'
 alias code='python /Users/tati/Desktop/GIT/HTTP-Status-Code-CLI/http_status_code_parser.py'
 alias todo='/bin/cat ~/.todo'
 alias ta='~/.local/bin/todo.sh APP'
@@ -97,4 +98,5 @@ alias tt='~/.local/bin/todo.sh TASK'
 alias tf='~/.local/bin/todo.sh FEATURE'
 alias th='~/.local/bin/todo.sh HOWTO'
 alias bc='python'
-alias ll='l'
+alias sv='parsecsv'
+alias swipl='prolog'
