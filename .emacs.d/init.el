@@ -7,7 +7,7 @@
 (package-initialize)
 
 
-;;; Code
+;;; Code:
 
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
@@ -23,13 +23,14 @@
  '(js2-idle-timer-delay 0)
  '(js2-include-node-externs t)
  '(js2-mode-assume-strict t)
+ '(js2-strict-missing-semi-warning nil)
  '(package-archives
    (quote
     (("gnu" . "http://elpa.gnu.org/packages/")
      ("melpa" . "https://melpa.org/packages/"))))
  '(package-selected-packages
    (quote
-    (highlight-symbol smooth-scrolling go-complete go-autocomplete go-mode json-mode swift-mode neotree ob-php org-bullets magit php-mode rainbow-mode js2-mode web-mode ac-html processing-mode multiple-cursors yasnippet which-key try smart-mode-line-powerline-theme org jedi hungry-delete flycheck expand-region counsel)))
+    (js-format js2-highlight-vars js-doc xref-js2 company-tern company ac-js2 highlight-symbol smooth-scrolling go-complete go-autocomplete go-mode json-mode swift-mode neotree ob-php org-bullets magit php-mode rainbow-mode js2-mode web-mode ac-html processing-mode multiple-cursors yasnippet which-key try smart-mode-line-powerline-theme org jedi hungry-delete flycheck expand-region counsel)))
  '(php-mode-coding-style (quote symfony2))
  '(python-indent-guess-indent-offset-verbose nil)
  '(python-shell-interpreter "python3.6")
@@ -64,7 +65,7 @@
  '(ivy-minibuffer-match-face-1 ((t (:background "white" :foreground "black"))))
  '(ivy-minibuffer-match-face-2 ((t (:background "cyan" :foreground "color-16" :weight bold))))
  '(ivy-minibuffer-match-face-3 ((t (:background "#ffffff" :foreground "color-16" :weight bold))))
- '(js2-function-call ((t (:foreground "color-162" :slant italic :weight semi-bold))))
+ '(js2-function-call ((t (:inherit nil :foreground "green" :slant italic :weight normal))))
  '(js2-function-param ((t (:foreground "color-243"))))
  '(js2-object-property ((t (:foreground "color-248"))))
  '(org-table ((t (:foreground "color-248"))))
@@ -117,18 +118,6 @@
 (defadvice terminal-init-xterm (after select-shift-up activate)
   (define-key input-decode-map "\e[1;2A" [S-up]))
 
-;; split the window in two only when in terminal
-(defun my-split-window (shouldOpenShell)
-"Open program specific shell interpreter.
-SHOULDOPENSHELL: name of shell to be opened."
-  (interactive)
-  (split-window-horizontally)
-    (if (or (functionp shouldOpenShell) (symbolp shouldOpenShell))
-	(progn
-	  (funcall-interactively shouldOpenShell) ; open required shell
-	  (other-window 1))))
-(global-set-key (kbd "C-x C-r") 'my-split-window)
-
 ;; term
 (defun my-term ()
  (interactive)
@@ -144,6 +133,32 @@ SHOULDOPENSHELL: name of shell to be opened."
     ad-do-it))
 
 ;;; PACKAGE MODE ACTIVATION
+(require 'company)
+(require 'company-tern)
+
+(add-to-list 'company-backends 'company-tern)
+(add-hook 'js2-mode-hook (lambda ()
+                           (tern-mode)
+                           (company-mode)))
+                           
+;; Disable completion keybindings, as we use xref-js2 instead
+(define-key tern-mode-keymap (kbd "M-.") nil)
+(define-key tern-mode-keymap (kbd "M-,") nil)
+
+;; Add yasnippet support for all company backends
+;; https://github.com/syl20bnr/spacemacs/pull/179
+(defvar company-mode/enable-yas t
+  "Enable yasnippet for all backends.")
+
+(defun company-mode/backend-with-yas (backend)
+  "Enable yas for all company BACKEND."
+  (if (or (not company-mode/enable-yas) (and (listp backend) (member 'company-yasnippet backend)))
+      backend
+    (append (if (consp backend) backend (list backend))
+            '(:with company-yasnippet))))
+
+(setq company-backends (mapcar #'company-mode/backend-with-yas company-backends))
+
 
 (ac-config-default)
 (auto-complete-mode t) ;auto-complete
@@ -163,7 +178,6 @@ SHOULDOPENSHELL: name of shell to be opened."
 (define-key ac-completing-map (kbd "TAB") nil)
 
 ;;; GENERAL PURPOSE KEYBINDING
-
 (global-set-key (kbd "C-z") 'undo)
 (global-set-key (kbd "C-x z") 'suspend-emacs)
 (global-set-key (kbd "M-c") 'switch-to-prev-buffer)
@@ -172,6 +186,7 @@ SHOULDOPENSHELL: name of shell to be opened."
 (global-set-key (kbd "C-s") 'save-buffer)
 (global-set-key (kbd "C-f") 'isearch-forward)
 (global-set-key (kbd "M-]") 'enlarge-window)
+(global-set-key (kbd "S-D") 'company-documentation)
 
 
 ;;; NEOTREE, FIND FILE, SWITCH BUFFER
@@ -181,11 +196,26 @@ SHOULDOPENSHELL: name of shell to be opened."
 (global-set-key (kbd "C-x C-f") 'counsel-find-file)
 (global-set-key (kbd "C-x b") 'ivy-switch-buffer)
 (global-set-key (kbd "C-x f") 'swiper)
+(global-set-key (kbd "C-x C-r") 'shell)
 
+;;; TERM MODE : enable mouse support
+(require 'mouse)
+(xterm-mouse-mode t)
+(require 'smooth-scrolling)
+(smooth-scrolling-mode 1)
+(setq smooth-scroll-margin 8)
+(global-set-key [mouse-4] '(lambda ()
+                           (interactive)
+                           (scroll-down 1)))
+(global-set-key [mouse-5] '(lambda ()
+                           (interactive)
+                           (scroll-up 1)))
 
 
 ;;; MULTIPLE CURSOR, EXPAND REGION
 
+(global-unset-key (kbd "M-<down-mouse-1>"))
+(global-set-key (kbd "S-<mouse-1>") 'mc/add-cursor-on-click)
 (global-set-key (kbd "C-x =") 'er/expand-region)
 (global-set-key (kbd "C-x l") 'mc/edit-lines)
 (global-set-key (kbd "C-x .") 'mc/mark-next-like-this)
@@ -204,21 +234,6 @@ SHOULDOPENSHELL: name of shell to be opened."
 	      (setq flyspell-mode 1)
 	      (toggle-truncate-lines -1)))
 
-;;; TERM MODE : enable mouse support when using the terminal
-
-(xterm-mouse-mode t)
-
-(require 'smooth-scrolling)
-(smooth-scrolling-mode 1)
-(setq smooth-scroll-margin 8)
-
-(require 'mouse) ;; needed for iterm2 compatibility
-(global-set-key [mouse-4] '(lambda ()
-                           (interactive)
-                           (scroll-down 1)))
-(global-set-key [mouse-5] '(lambda ()
-                           (interactive)
-                           (scroll-up 1)))
 
 ;;; COMMINT -- repeats the last command using arrow keys
 (progn(require 'comint)
@@ -244,7 +259,6 @@ SHOULDOPENSHELL: name of shell to be opened."
 (add-hook 'python-mode-hook
       (lambda ()
         (setq indent-tabs-mode t)
-	(setq python-indent 4)
         (setq tab-width 4)))
 
 (font-lock-add-keywords 'python-mode
@@ -261,9 +275,8 @@ SHOULDOPENSHELL: name of shell to be opened."
 (when (memq window-system '(mac ns))
   (exec-path-from-shell-initialize)
   (exec-path-from-shell-copy-env "GOPATH")))
+(add-hook 'go-mode-hook (lambda () (add-hook 'before-save-hook 'gofmt nil 'local)))
 
-(add-hook 'go-mode-hook (lambda () (add-hook 'after-save-hook 'gofmt nil 'local)))
-(add-hook 'go-mode-hook (lambda () (add-hook 'after-init-hook (lambda () (my-split-window 'shell)) 'append)))
 ;;; ORG MODE
 (setq org-src-fontify-natively t)
 (add-hook 'org-mode-hook
@@ -273,7 +286,7 @@ SHOULDOPENSHELL: name of shell to be opened."
 ;;; C-MODE
 
 ;; fix indentation style
-(setq c-default-style "linux"c-basic-offset 4)
+(setq c-default-style "linux" c-basic-offset 4)
 (c-set-offset 'inexpr-class 0)
 
 (font-lock-add-keywords
@@ -301,6 +314,20 @@ SHOULDOPENSHELL: name of shell to be opened."
 (add-to-list 'auto-mode-alist '("\\.php?\\'" . web-mode))
 (add-to-list 'auto-mode-alist '("\\.js?\\'" . js2-mode))
 
+;;; PROLOG MODE
+(autoload 'prolog-mode "prolog" "Major mode for editing Prolog programs." t)
+(add-to-list 'auto-mode-alist '("\\.pl\\'" . prolog-mode))
+
+;;; JS2 Mode with JavaScript
+(require 'js-format)
+(eval-after-load "js2-highlight-vars-autoloads"
+  '(add-hook 'js2-mode-hook (lambda ()
+			      (js2-highlight-vars-mode))))
+;; using "standard" as js formatter
+(add-hook 'before-save-hook 'js2-mode-hook
+            (lambda()
+              (js-format-setup "standard")))
+
 (font-lock-add-keywords 'css-mode
   '(("\\([[:alpha:]-]+\\)[^: ]?:" 1 font-lock-preprocessor-face) ; selectors
 	("^[ \t]*\\([.].+\\)$" 1 font-lock-keyword-face) ; selectors
@@ -309,6 +336,8 @@ SHOULDOPENSHELL: name of shell to be opened."
 	("\\([:,\\*%]\\)" 1 'font-lock-builtin-face))); misc
 
 
+
 ;;; Commentary:
 (provide '.emacs)
+
 ;;; init.el ends here
