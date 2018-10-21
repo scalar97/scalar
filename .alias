@@ -9,14 +9,10 @@ if test $(uname) = 'Linux'; then
     alias mandb='sudo mandb'
     alias db='sudo updatedb'
     alias cl='sudo bleachbit'
-    alias hex="od -t x1"
-    alias gmail='$OPEN https://mail.google.com/mail/u/0/#inbox'
-    alias use='~/.local/bin/use-5.0.0/bin/use'
     alias diff='diff -y --color=always'
 else
     # .alias is being used on Darwin
     alias db='sudo /usr/libexec/locate.updatedb'
-    alias m='$OPEN /Applications/Mail.app'
     function diff { colordiff -u "$@" | less -RF ;}
 fi
 
@@ -57,6 +53,7 @@ function grepp() { grep -rine $([ $# -eq 1 ] && echo  "$1 ." || echo $@);}
 cd() { [ $# -eq 0 ] && builtin cd ~  ||  { builtin cd "$1" && echo && ls -aFG && echo;} }
 
 # custom aliaces
+alias m='$OPEN https://mail.google.com/mail/u/0/#inbox'
 alias emacs='emacs-25.3'
 alias python='python3.6'
 alias l='ls -alFgG'
@@ -99,4 +96,5 @@ alias tf='~/.local/bin/todo.sh FEATURE'
 alias th='~/.local/bin/todo.sh HOWTO'
 alias bc='python'
 alias sv='parsecsv'
-alias swipl='prolog'
+alias prolog='swipl -q'
+alias jac='javac'

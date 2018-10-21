@@ -259,7 +259,8 @@
 (add-hook 'python-mode-hook
       (lambda ()
         (setq indent-tabs-mode t)
-        (setq tab-width 4)))
+        (setq tab-width 4)
+	(setq python-indent-offset 4)))
 
 (font-lock-add-keywords 'python-mode
     '(("\\<[\\+-]?[0-9]+\\(.[0-9]+\\)?\\>" 0 'font-lock-constant-face)
