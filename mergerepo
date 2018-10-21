@@ -1,0 +1,89 @@
+#!/usr/bin/env bash
+
+# Merge a branch from another repository into a branch in your local repository.
+# eg. directories repo2 and repo1 are in the current diretory.
+
+# escape the tailling / to get the basename
+repo1=$(echo -e "${1/\/}")
+repo2=$(echo -e "${2/\/}")
+
+# check if this is the parent directory of both directory
+count=$(find ./ -type d -maxdepth 1 | grep -e "$repo1" -e "$repo2"| wc -l | sed 's/ //g')
+
+if [ $count -ne 2 ]; then
+	echo -e "Error: $count directories found with given names."
+	echo -e "To Fix: change to parent directory or give correct repository name."
+	exit
+fi
+
+# start with repo1 repository
+builtin cd "./$repo1"
+
+git status
+if [ $? -ne 0 ]; then
+	echo "Error: repository '$repo1' should be 'All clean!'"
+	exit
+fi
+git pull
+if [ $? -ne 0 ]; then
+	echo "Error: $repo1 should be 'up-to-date'"
+	exit
+fi
+
+echo -e 'Creating a temp1 branch in $repo1...\n\n'
+git checkout -b temp1
+
+if [ $? -ne 0 ]; then
+echo 'Error: Unable to create temp1 branch'
+	exit
+fi
+echo -e 'temp1 created sucessfully!\n\n'
+git branch
+
+## Change into the repo2 repository.
+builtin cd "../$repo2"
+
+## NOTE: repo2 should also be 'All clean!' and 'Everything up-to-date'
+git status
+if [ $? -ne 0 ]; then
+	echo "Error: '$repo2' should be 'All clean!'"
+	exit
+fi
+git pull
+if [ $? -ne 0 ]; then
+	echo "Error: '$repo2' should be 'up-to-date'"
+	exit
+fi
+
+echo -e 'Adding remote $repo1 to $repo2...\n\n'
+git remote add $repo1 ../$repo1
+if [ $? -ne 0 ]; then
+	echo 'Error: failed to add $repo1 as a remote repository.'
+	exit
+fi
+echo -e 'Updating remote $repo2...\n\n'
+git remote update
+
+## Create a new branch temp2 in the repo2 repository and switch to it.
+## WATCH OUT FOR MERGE CONFLICS, especially with .gitignore
+git checkout -b temp2
+if [ $? -ne 0 ]; then
+	echo 'Error: Unable to create temp2 branch'
+	exit
+fi
+echo -e 'temp2 created sucessfully\n\n'
+git branch
+
+# Merge branch temp1 from the repo1 repository into the current branch:
+git merge --allow-unrelated-histories "$repo1/temp1"
+
+# Now merge temp2 into repo2/master
+git checkout master && git branch && git pull origin master
+git merge temp2 && git push origin master
+
+# delete temp2 and temp1 branches
+git branch -d temp2 && git branch
+builtin cd "../$repo1"
+git branch -d temp1
+
+builtin cd "../"
