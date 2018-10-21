@@ -83,7 +83,6 @@ git merge temp2 && git push origin master
 
 # delete temp2 and temp1 branches
 git branch -d temp2 && git branch
-builtin cd "../$repo1"
-git branch -d temp1
 
+# go back to parent directory
 builtin cd "../"
