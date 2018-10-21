@@ -27,6 +27,7 @@ get_ps1() {
 # set encvironemental variables.
 # Node.js dependency variables
 ICU4C="/usr/local/opt/icu4c"
+# GIT workspace
 GIT_WORKSPACE="$HOME/Desktop/GIT"
 # openSSL
 export PATH="/usr/local/opt/openssl/bin:$PATH"
@@ -43,7 +44,7 @@ export GOPATH="$HOME/Desktop/GIT/go"
 export GOBIN="$GOPATH/bin"
 export ANDROID_HOME=/Users/$USER/Library/Android/sdk
 export PATH=${PATH}:$ANDROID_HOME/tools:$ANDROID_HOME/platform-tools
-export PATH=".:$PATH:~/.local/bin/:$GOPATH:$GOBIN:$ICU4C/bin:$ICU4C/sbin:$GIT_WORKSPACE/Unix-Arena"
+export PATH=".:$PATH:~/.local/bin/:$GOPATH:$GOBIN:$ICU4C/bin:$ICU4C/sbin:$GIT_WORKSPACE/UnixArena"
 export PKG_CONFIG_PATH="/usr/local/opt/icu4c/lib/pkgconfig"
 export CDPATH=".:~:~/Desktop/:~/Desktop/GIT/"
 export LSCOLORS=ExFxBxDxCxegedabagacad

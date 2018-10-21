@@ -52,6 +52,11 @@ function run(){
 function grepp() { grep -rine $([ $# -eq 1 ] && echo  "$1 ." || echo $@);}
 cd() { [ $# -eq 0 ] && builtin cd ~  ||  { builtin cd "$1" && echo && ls -aFG && echo;} }
 
+function joke(){
+    for i in $(seq 1 $1); do
+	fortune -s | cowsay -f /usr/local/Cellar/cowsay/3.04/share/cows/small.cow
+    done
+}
 # custom aliaces
 alias m='$OPEN https://mail.google.com/mail/u/0/#inbox'
 alias emacs='emacs-25.3'
