@@ -39,10 +39,10 @@ check_error $? 'Unable to create a branch in $repo1'
 
 echo -e 'temporary branch created sucessfully!\n\n' && git branch
 
-## Change into the repo2 repository.
+# Change into the repo2 repository.
 builtin cd "../$repo2"
 
-## NOTE: repo2 should also be 'All clean!' and 'Everything up-to-date'
+# NOTE: repo2 should also be 'All clean!' and 'Everything up-to-date'
 git status
 check_error $? "repository '$repo2' should be 'All clean!'"
 git pull
@@ -55,8 +55,8 @@ check_error $? "failed to add '$repo1' as a remote branch."
 echo -e "Fetching remote branch '$repo2'...\n\n"
 git remote update
 
-## Create a new branch temp2 in the repo2 repository and switch to it.
-## WATCH OUT FOR MERGE CONFLICS, especially with .gitignore
+# Create a new branch temp2 in the repo2 repository and switch to it.
+# WATCH OUT FOR MERGE CONFLICS, especially with .gitignore
 git checkout -b temp2 2> /dev/null
 check_error $? 'Unable to create a temporary branch in $repo2'
 
@@ -71,8 +71,10 @@ git merge --allow-unrelated-histories "$repo1/temp1"
 git checkout master 2> /dev/null && git branch && git pull origin master
 git merge temp2 && git push origin master
 
-# delete temp2 and temp1 branches
+# delete temp temporary branch
 git branch -d temp2 > /dev/null
+
+# check if changes are reflected i.e the head should be the merge.
 git log -n 1 --graph --pretty=format:'%h - %C(bold green)(%cr)%Creset%C(yellow):%s:%C(bold blue)%d%Creset'
 
 echo -e "\nMerge Complete 👻\n"
