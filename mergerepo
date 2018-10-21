@@ -1,88 +1,81 @@
 #!/usr/bin/env bash
 
-# Merge a branch from another repository into a branch in your local repository.
-# eg. directories repo2 and repo1 are in the current diretory.
+# This Script merges the git repository specified by '$repo1'
+# into the master branch of the repository specified by '$repo2'
+# both $repo1 and $repo2 must be in the same parent directory.
 
-# escape the tailling / to get the basename
+function check_error() {
+    if [ $1 -ne 0 ]; then
+	echo "Error: $2" && exit
+    fi
+}
+# escape the tailling '/' to get the repositories' basenames.
 repo1=$(echo -e "${1/\/}")
 repo2=$(echo -e "${2/\/}")
 
-# check if this is the parent directory of both directory
-count=$(find ./ -type d -maxdepth 1 | grep -e "$repo1" -e "$repo2"| wc -l | sed 's/ //g')
+# check if $PWD is the parent directory of both directories.
+count=$(find ./ -type d -maxdepth 1 | grep -c -e "$repo1" -e "$repo2")
 
 if [ $count -ne 2 ]; then
-	echo -e "Error: $count directories found with given names."
-	echo -e "To Fix: change to parent directory or give correct repository name."
+	echo "Error: $count directories found with names in $@.
+	      Possible Fixes: 
+	      	  - change to parent directory
+		  - enter valid repository names."
 	exit
 fi
 
-# start with repo1 repository
+# switch to $repo1 and create the temp1 branch
 builtin cd "./$repo1"
 
-git status
-if [ $? -ne 0 ]; then
-	echo "Error: repository '$repo1' should be 'All clean!'"
-	exit
-fi
+git status 
+check_error $? "repository '$repo1' should be 'All clean!'"
 git pull
-if [ $? -ne 0 ]; then
-	echo "Error: $repo1 should be 'up-to-date'"
-	exit
-fi
+check_error $? "$repo1 should be 'up-to-date'"
 
-echo -e 'Creating a temp1 branch in $repo1...\n\n'
-git checkout -b temp1
+echo -e 'Creating a temporary branch in $repo1...\n\n'
 
-if [ $? -ne 0 ]; then
-echo 'Error: Unable to create temp1 branch'
-	exit
-fi
-echo -e 'temp1 created sucessfully!\n\n'
-git branch
+git checkout -b temp1 2> /dev/null
+check_error $? 'Unable to create a branch in $repo1'
+
+echo -e 'temporary branch created sucessfully!\n\n' && git branch
 
 ## Change into the repo2 repository.
 builtin cd "../$repo2"
 
 ## NOTE: repo2 should also be 'All clean!' and 'Everything up-to-date'
 git status
-if [ $? -ne 0 ]; then
-	echo "Error: '$repo2' should be 'All clean!'"
-	exit
-fi
+check_error $? "repository '$repo2' should be 'All clean!'"
 git pull
-if [ $? -ne 0 ]; then
-	echo "Error: '$repo2' should be 'up-to-date'"
-	exit
-fi
+check_error $? "repository '$repo2' should be 'up-to-date'"
 
-echo -e 'Adding remote $repo1 to $repo2...\n\n'
+echo -e "Adding remote $repo1 to '$repo2'..\n\n"
 git remote add $repo1 ../$repo1
-if [ $? -ne 0 ]; then
-	echo 'Error: failed to add $repo1 as a remote repository.'
-	exit
-fi
-echo -e 'Updating remote $repo2...\n\n'
+check_error $? "failed to add '$repo1' as a remote branch."
+
+echo -e "Fetching remote branch '$repo2'...\n\n"
 git remote update
 
 ## Create a new branch temp2 in the repo2 repository and switch to it.
 ## WATCH OUT FOR MERGE CONFLICS, especially with .gitignore
-git checkout -b temp2
-if [ $? -ne 0 ]; then
-	echo 'Error: Unable to create temp2 branch'
-	exit
-fi
-echo -e 'temp2 created sucessfully\n\n'
-git branch
+git checkout -b temp2 2> /dev/null
+check_error $? 'Unable to create a temporary branch in $repo2'
+
+echo -e 'Temporary branch created sucessfully\n\n' && git branch
 
 # Merge branch temp1 from the repo1 repository into the current branch:
+# This will open $EDITOR to edit the merge reson.
+echo -e "Merging branches...\n\n"
 git merge --allow-unrelated-histories "$repo1/temp1"
 
 # Now merge temp2 into repo2/master
-git checkout master && git branch && git pull origin master
+git checkout master 2> /dev/null && git branch && git pull origin master
 git merge temp2 && git push origin master
 
 # delete temp2 and temp1 branches
-git branch -d temp2 && git branch
+git branch -d temp2 > /dev/null
+git log -n 1 --graph --pretty=format:'%h - %C(bold green)(%cr)%Creset%C(yellow):%s:%C(bold blue)%d%Creset'
 
-# go back to parent directory
+echo -e "\nMerge Complete 👻\n"
+
+# go back to initial parent directory
 builtin cd "../"
