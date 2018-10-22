@@ -7,13 +7,11 @@
 
 # This allows to merge two repositories while keeping the commits from both
 
-
 program=$(basename $0)
 # escape the trailling '/' to get the repositories' basenames.
 repo1=$(echo -e "${1/\/}")
 repo2=$(echo -e "${2/\/}")
 # check if $PWD is the parent directory of both directories.
- 
 count=$(find ./ -type d -maxdepth 1 | grep -c -e "$repo1" -e "$repo2")
 ! [ -z $repo1 ] && ! [ -z $repo2 ] ||  count=-1
 # colors
@@ -30,9 +28,7 @@ function cleanup() {
     merge_info "\nCleaning up...\n"
     builtin cd ../ && builtin cd $repo2 >/dev/null 2>&1
     git remote rm $repo1 >/dev/null 2>&1
-    git branch -D temp2 >/dev/null 2>&1
-    builtin cd ../$repo1
-    git branch -D temp1 >/dev/null 2>&1
+    git branch -D temp >/dev/null 2>&1
     return 0
 }
 function check_status() {
@@ -50,22 +46,9 @@ check_error $? "2 valid git repositories required.
 		    - change to parent directory
 		    - enter valid git repository names."
 
-# switch to $repo1 and create the temp1 branch
-builtin cd "./$repo1"
-check_status $repo1
-
-merge_info "Creating a temporary branch in $repo1..."
-
-git checkout -b temp1 >/dev/null 2>&1 && git checkout master >/dev/null 2>&1
-check_error $? "unable to create a branch in $repo1"
-
-merge_info 'Temporary branch created successfully!' $GREEN
-
-# Change into the repo2 repository.
-builtin cd "../$repo2"
-
-# NOTE: repo2 should also be 'All clean!' and 'Everything up-to-date'
-check_status $repo2
+# Ensure both repositories are All Clean and Up-To-Date
+builtin cd "./$repo1" && check_status $repo1
+builtin cd "../$repo2" && check_status $repo2
 
 merge_info "Adding remote '$repo1' to repository '$repo2'..."
 git remote add $repo1 ../$repo1
@@ -75,20 +58,18 @@ merge_info "Fetching remote branch '$repo2'..."
 git remote update >/dev/null 2>&1
 
 merge_info "Creating a temporary branch in $repo2..."
-# Create a new branch temp2 in the repo2 repository and switch to it.
-git checkout -b temp2 >/dev/null 2>&1 
+# Create a new branch temp in the repo2 repository and switch to it.
+git checkout -b temp >/dev/null 2>&1 
 check_error $? "unable to create a temporary branch in $repo2"
-
 merge_info 'Temporary branch created successfully!' $GREEN
 
-# Merge branch temp1 from the repo1 repository into the current branch:
 # This will open $EDITOR to edit the merge reason.
 merge_info "Merging branches...\n\n"
-git merge --allow-unrelated-histories "$repo1/temp1"
+git merge --allow-unrelated-histories "$repo1/master"
 
-# Now merge temp2 into repo2/master
+# Now merge temp into repo2/master
 git checkout master >/dev/null 2>&1
-git merge temp2 && git push origin master >/dev/null 2>&1
+git merge temp && git push origin master >/dev/null 2>&1
 
 merge_info "\n-> head of destination '$repo2'\n" $RED
 # check if changes are reflected i.e if head points to new merge.
