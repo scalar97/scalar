@@ -6,41 +6,60 @@
 # NOTE: both $repo1 and $repo2 must be in the same parent directory.
 
 # This allows to merge two repositories while keeping the commits from both
-function check_error() {
-    if [ $1 -ne 0 ]; then
-	echo "Error: $2" && exit
-    fi
-}
-function check_status() {
-	git status 2> /dev/null && check_error $? "git status:'$1' should be 'All clean!'"
-	git pull 2> /dev/null && check_error $? "git pull:'$1' should be 'Already up to date.'"
-}
 
+
+program=$(basename $0)
 # escape the trailling '/' to get the repositories' basenames.
 repo1=$(echo -e "${1/\/}")
 repo2=$(echo -e "${2/\/}")
-
 # check if $PWD is the parent directory of both directories.
+ 
 count=$(find ./ -type d -maxdepth 1 | grep -c -e "$repo1" -e "$repo2")
+! [ -z $repo1 ] && ! [ -z $repo2 ] ||  count=-1
+# colors
+RED="\033[0;31m"
+RESET="\033[1;0m"
+GREEN="\033[1;32m"
 
-if [ $count -ne 2 ]; then
-	echo "Error: 2 git repositories required, $count found in {$@}.
-	      Possible Fixes: 
-	      	  - change to parent directory
-		  - enter valid repository names."
-	exit
-fi
+function check_error() {
+    if [ $1 -ne 0 ]; then
+      echo -e $RED"\n$program: error: $2"$RESET && cleanup && exit
+    fi
+}
+function cleanup() {
+    merge_info "\nCleaning up...\n"
+    builtin cd ../ && builtin cd $repo2 >/dev/null 2>&1
+    git remote rm $repo1 >/dev/null 2>&1
+    git branch -D temp2 >/dev/null 2>&1
+    builtin cd ../$repo1
+    git branch -D temp1 >/dev/null 2>&1
+    return 0
+}
+function check_status() {
+	git status >/dev/null 2>&1 && check_error $? "$program:git status:'$1' should be 'All clean!'"
+	git pull >/dev/null 2>&1 && check_error $? "$program:git pull:'$1' should be 'Already up to date.'"
+}
+function merge_info(){
+    echo -e "\n"$2$1$RESET
+}
+
+merge_info 'Searching repositories...'
+test $count -eq 2
+check_error $? "2 valid git repositories required.
+	          Possible Fixes:
+		    - change to parent directory
+		    - enter valid git repository names."
 
 # switch to $repo1 and create the temp1 branch
 builtin cd "./$repo1"
 check_status $repo1
 
-echo -e 'Creating a temporary branch in $repo1...\n\n'
+merge_info "Creating a temporary branch in $repo1..."
 
-git checkout -b temp1 2> /dev/null
-check_error $? 'Unable to create a branch in $repo1'
+git checkout -b temp1 >/dev/null 2>&1 && git checkout master >/dev/null 2>&1
+check_error $? "unable to create a branch in $repo1"
 
-echo -e 'temporary branch created successfully!\n\n' && git branch
+merge_info 'Temporary branch created successfully!' $GREEN
 
 # Change into the repo2 repository.
 builtin cd "../$repo2"
@@ -48,35 +67,37 @@ builtin cd "../$repo2"
 # NOTE: repo2 should also be 'All clean!' and 'Everything up-to-date'
 check_status $repo2
 
-echo -e "Adding remote $repo1 to '$repo2'..\n\n"
+merge_info "Adding remote '$repo1' to repository '$repo2'..."
 git remote add $repo1 ../$repo1
 check_error $? "failed to add '$repo1' as a remote branch."
 
-echo -e "Fetching remote branch '$repo2'...\n\n"
-git remote update 2> /dev/null
+merge_info "Fetching remote branch '$repo2'..."
+git remote update >/dev/null 2>&1
 
+merge_info "Creating a temporary branch in $repo2..."
 # Create a new branch temp2 in the repo2 repository and switch to it.
-git checkout -b temp2 2> /dev/null
-check_error $? 'Unable to create a temporary branch in $repo2'
+git checkout -b temp2 >/dev/null 2>&1 
+check_error $? "unable to create a temporary branch in $repo2"
 
-echo -e 'Temporary branch created successfully\n\n' && git branch
+merge_info 'Temporary branch created successfully!' $GREEN
 
 # Merge branch temp1 from the repo1 repository into the current branch:
 # This will open $EDITOR to edit the merge reason.
-echo -e "Merging branches...\n\n"
+merge_info "Merging branches...\n\n"
 git merge --allow-unrelated-histories "$repo1/temp1"
 
 # Now merge temp2 into repo2/master
-git checkout master 2> /dev/null && git branch
-git merge temp2 && git push origin master 
+git checkout master >/dev/null 2>&1
+git merge temp2 && git push origin master >/dev/null 2>&1
 
-# delete temp temporary branch
-git branch -d temp2 > /dev/null
-
-# check if changes are reflected i.e the head should be the merge.
+merge_info "\n-> head of destination '$repo2'\n" $RED
+# check if changes are reflected i.e if head points to new merge.
 git log -n 1 --graph --pretty=format:'%h - %C(bold green)(%cr)%Creset%C(yellow):%s:%C(bold blue)%d%Creset'
 
-echo -e "\nMerge Complete 👻\n"
+# Cleanup: delete temporary branches, remove remote branches etc.
+cleanup
+
+merge_info "Merge Complete 👻\n" $GREEN
 
 # go back to initial parent directory
 builtin cd "../"
