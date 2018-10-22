@@ -1,15 +1,22 @@
 #!/usr/bin/env bash
+# Author : Tatiana Zihindula ~ 21/10/2018
 
 # This Script merges the git repository specified by '$repo1'
 # into the master branch of the repository specified by '$repo2'
-# both $repo1 and $repo2 must be in the same parent directory.
+# NOTE: both $repo1 and $repo2 must be in the same parent directory.
 
+# This allows to merge two repositories while keeping the commits from both
 function check_error() {
     if [ $1 -ne 0 ]; then
 	echo "Error: $2" && exit
     fi
 }
-# escape the tailling '/' to get the repositories' basenames.
+function check_status() {
+	git status 2> /dev/null && check_error $? "git status:'$1' should be 'All clean!'"
+	git pull 2> /dev/null && check_error $? "git pull:'$1' should be 'Already up to date.'"
+}
+
+# escape the trailling '/' to get the repositories' basenames.
 repo1=$(echo -e "${1/\/}")
 repo2=$(echo -e "${2/\/}")
 
@@ -17,7 +24,7 @@ repo2=$(echo -e "${2/\/}")
 count=$(find ./ -type d -maxdepth 1 | grep -c -e "$repo1" -e "$repo2")
 
 if [ $count -ne 2 ]; then
-	echo "Error: $count directories found with names in $@.
+	echo "Error: 2 git repositories required, $count found in {$@}.
 	      Possible Fixes: 
 	      	  - change to parent directory
 		  - enter valid repository names."
@@ -26,50 +33,42 @@ fi
 
 # switch to $repo1 and create the temp1 branch
 builtin cd "./$repo1"
-
-git status 
-check_error $? "repository '$repo1' should be 'All clean!'"
-git pull
-check_error $? "$repo1 should be 'up-to-date'"
+check_status $repo1
 
 echo -e 'Creating a temporary branch in $repo1...\n\n'
 
 git checkout -b temp1 2> /dev/null
 check_error $? 'Unable to create a branch in $repo1'
 
-echo -e 'temporary branch created sucessfully!\n\n' && git branch
+echo -e 'temporary branch created successfully!\n\n' && git branch
 
 # Change into the repo2 repository.
 builtin cd "../$repo2"
 
 # NOTE: repo2 should also be 'All clean!' and 'Everything up-to-date'
-git status
-check_error $? "repository '$repo2' should be 'All clean!'"
-git pull
-check_error $? "repository '$repo2' should be 'up-to-date'"
+check_status $repo2
 
 echo -e "Adding remote $repo1 to '$repo2'..\n\n"
 git remote add $repo1 ../$repo1
 check_error $? "failed to add '$repo1' as a remote branch."
 
 echo -e "Fetching remote branch '$repo2'...\n\n"
-git remote update
+git remote update 2> /dev/null
 
 # Create a new branch temp2 in the repo2 repository and switch to it.
-# WATCH OUT FOR MERGE CONFLICS, especially with .gitignore
 git checkout -b temp2 2> /dev/null
 check_error $? 'Unable to create a temporary branch in $repo2'
 
-echo -e 'Temporary branch created sucessfully\n\n' && git branch
+echo -e 'Temporary branch created successfully\n\n' && git branch
 
 # Merge branch temp1 from the repo1 repository into the current branch:
-# This will open $EDITOR to edit the merge reson.
+# This will open $EDITOR to edit the merge reason.
 echo -e "Merging branches...\n\n"
 git merge --allow-unrelated-histories "$repo1/temp1"
 
 # Now merge temp2 into repo2/master
-git checkout master 2> /dev/null && git branch && git pull origin master
-git merge temp2 && git push origin master
+git checkout master 2> /dev/null && git branch
+git merge temp2 && git push origin master 
 
 # delete temp temporary branch
 git branch -d temp2 > /dev/null
