@@ -12,12 +12,10 @@ program=$(basename $0)
 repo1=$(echo -e "${1/\/}")
 repo2=$(echo -e "${2/\/}")
 # check if $PWD is the parent directory of both directories.
-count=$(find ./ -type d -maxdepth 1 | grep -c -e "$repo1" -e "$repo2")
+count=$(find ./ -type d -maxdepth 1 | grep -cw -e "$repo1" -e "$repo2")
 ! [ -z $repo1 ] && ! [ -z $repo2 ] ||  count=-1
 # colors
-RED="\033[0;31m"
-RESET="\033[1;0m"
-GREEN="\033[1;32m"
+RED="\033[0;31m"; GREEN="\033[1;32m"; ORANGE="\033[1;33m"; RESET="\033[1;0m"
 
 function check_error() {
     if [ $1 -ne 0 ]; then
@@ -25,10 +23,9 @@ function check_error() {
     fi
 }
 function cleanup() {
-    merge_info "\nCleaning up...\n"
+    merge_info "Cleaning up...\n"
     builtin cd ../ && builtin cd $repo2 >/dev/null 2>&1
     git remote rm $repo1 >/dev/null 2>&1
-    git branch -D temp >/dev/null 2>&1
     return 0
 }
 function check_status() {
@@ -39,7 +36,7 @@ function merge_info(){
     echo -e "\n"$2$1$RESET
 }
 
-merge_info 'Searching repositories...'
+merge_info 'Searching repositories...' $ORANGE
 test $count -eq 2
 check_error $? "2 valid git repositories required.
 	          Possible Fixes:
@@ -57,25 +54,18 @@ check_error $? "failed to add '$repo1' as a remote branch."
 merge_info "Fetching remote branch '$repo2'..."
 git remote update >/dev/null 2>&1
 
-merge_info "Creating a temporary branch in $repo2..."
-# Create a new branch temp in the repo2 repository and switch to it.
-git checkout -b temp >/dev/null 2>&1 
-check_error $? "unable to create a temporary branch in $repo2"
-merge_info 'Temporary branch created successfully!' $GREEN
-
 # This will open $EDITOR to edit the merge reason.
-merge_info "Merging branches...\n\n"
+merge_info "Merging branches...\n\n" $ORANGE
 git merge --allow-unrelated-histories "$repo1/master"
 
-# Now merge temp into repo2/master
-git checkout master >/dev/null 2>&1
-git merge temp && git push origin master >/dev/null 2>&1
+# Now merge repo1/master into repo2/master
+git push origin master >/dev/null 2>&1
 
 merge_info "\n-> head of destination '$repo2'\n" $RED
 # check if changes are reflected i.e if head points to new merge.
 git log -n 1 --graph --pretty=format:'%h - %C(bold green)(%cr)%Creset%C(yellow):%s:%C(bold blue)%d%Creset'
 
-# Cleanup: delete temporary branches, remove remote branches etc.
+# Cleanup: remove remote branches etc.
 cleanup
 
 merge_info "Merge Complete 👻\n" $GREEN
