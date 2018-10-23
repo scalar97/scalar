@@ -40,11 +40,9 @@ export LDFLAGS="-L/usr/local/opt/readline/lib"
 export CPPFLAGS="-I/usr/local/opt/readline/include"
  
 export CLICOLOR=1
-export GOPATH="$HOME/Desktop/GIT/go"
-export GOBIN="$GOPATH/bin"
 export ANDROID_HOME=/Users/$USER/Library/Android/sdk
 export PATH=${PATH}:$ANDROID_HOME/tools:$ANDROID_HOME/platform-tools
-export PATH=".:$PATH:~/.local/bin/:$GOPATH:$GOBIN:$ICU4C/bin:$ICU4C/sbin:$GIT_WORKSPACE/UnixArena"
+export PATH=".:$PATH:~/.local/bin/:$ICU4C/bin:$ICU4C/sbin:$GIT_WORKSPACE/UnixArena:/Applications/XAMPP/xamppfiles/bin"
 export PKG_CONFIG_PATH="/usr/local/opt/icu4c/lib/pkgconfig"
 export CDPATH=".:~:~/Desktop/:~/Desktop/GIT/"
 export LSCOLORS=ExFxBxDxCxegedabagacad
