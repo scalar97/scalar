@@ -16,7 +16,7 @@ else
     function diff { colordiff -u "$@" | less -RF ;}
 fi
 
-# Aliaces that are Common to both
+# Aliaces that are Common to both Linux & Darwin
 
 # these swap functions are used with aliaces
 swap() { $1 $3; $2;}
@@ -40,15 +40,9 @@ function github() {
 }
 function gc() {
     git_do "git commit -m " "$(echo $@)" #second argument will be added at the command line
-    echo -e "\n\n"
-    gs
-    echo
+    echo -e "\n" ; gs ; echo
 }
 function gd(){ git diff $@ && gs; }
-function doc(){ godoc $1 | less; }
-function run(){
-    [ $# == 0 ] && go run *.go || go run "$1.go" 
-}
 function grepp() { grep -rine $([ $# -eq 1 ] && echo  "$1 ." || echo $@);}
 cd() { [ $# -eq 0 ] && builtin cd ~  ||  { builtin cd "$1" && echo && ls -aFG && echo;} }
 
@@ -57,49 +51,37 @@ function joke(){
 	fortune -s | cowsay -f /usr/local/Cellar/cowsay/3.04/share/cows/small.cow
     done
 }
+function ly() {
+    python3.6 $HOME/Desktop/GIT/Experimental/python/lyrics-finder/lyrics_finder.py $@ | less
+}
 # custom aliaces
 alias m='$OPEN https://mail.google.com/mail/u/0/#inbox'
 alias emacs='emacs-25.3'
-alias python='python3.6'
+alias python='python3.7'
 alias l='ls -alFgG'
 alias ll='l'
 alias la='ls -AF'
 alias grep='grep --color=always'
 alias gdb='gdb -q'
-alias calc="sage"
 alias bc='bc -q'
 alias top='htop'
 alias locate='swap_pipe "locate" "more" $1'
 alias j='swap_pipe "joke.sh" "less" 8'
 alias apropos='swap_pipe "apropos" "more" $1'
 alias gh='git_do "github"'
-alias gr='git rm --cached'
-alias gu='git pull'
 alias gp='git push'
 alias gaa='git add --all && gs'
-alias gss='git_dir "gs"' # gets the status of all remote repos from specified folder
+alias gss='git_dir "gs"' # gets the status of all remote repos in the current workspace
 alias gpp='git_dir "git pull"'   # pull all directories at once.
-alias gll='git_dir "gl" "head -n 1"'   # pull all directories at once.
+alias gll='git_dir "gl" "head -n 1"'   # log all directories at once.
 alias ..='cd ..'
 alias ...='cd ../..'
 alias .b='. ~/.bashrc' # on Darwin, .bashrc is a symlink to .bash_profile
 alias g="google" #alias to the google function in .bash_profile
-alias facebook='$OPEN https://www.facebook.com/'
-alias youtube='google -youtube'
-alias y='youtube'
+alias y='google -youtube'
 alias wiki='google wikipedia'
-alias kl='kill %1' 
-alias p='bpython'
+alias kl='kill %1'
 alias ps='ps -a'
 alias c='clear'
 alias catn='cat -n'
-alias code='python /Users/tati/Desktop/GIT/HTTP-Status-Code-CLI/http_status_code_parser.py'
-alias todo='/bin/cat ~/.todo'
-alias ta='~/.local/bin/todo.sh APP'
-alias tt='~/.local/bin/todo.sh TASK'
-alias tf='~/.local/bin/todo.sh FEATURE'
-alias th='~/.local/bin/todo.sh HOWTO'
-alias bc='python'
-alias sv='parsecsv'
-alias prolog='swipl -q'
 alias jac='javac'
