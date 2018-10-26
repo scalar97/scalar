@@ -52,7 +52,7 @@ function joke(){
     done
 }
 function ly() {
-    python3.6 $HOME/Desktop/GIT/Experimental/python/lyrics-finder/lyrics_finder.py $@ | less
+    python3.6 $HOME/Desktop/GIT/Experimental/python/lyrics-finder/lyrics_finder.py $@ | more
 }
 # custom aliaces
 alias m='$OPEN https://mail.google.com/mail/u/0/#inbox'
@@ -83,5 +83,4 @@ alias wiki='google wikipedia'
 alias kl='kill %1'
 alias ps='ps -a'
 alias c='clear'
-alias catn='cat -n'
 alias jac='javac'

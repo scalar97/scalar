@@ -78,11 +78,16 @@ fi
 
 # create an alias and add it to the alias config file
 al(){
-    # create aliaces and write them to file for later sourcing
-    echo 'alias '$1="'$2'" >> ~/.alias
-    . ~/.bashrc # symlink or file depending on OS
+    if [ "$#" -eq 0 ]; then
+        # simply edit dot alias
+        $EDITOR ~/.alias
+    else
+	# create an alias then write it to ~/.alias
+	echo 'alias '$1="'$2'" >> ~/.alias
+	. ~/.bashrc # .bashrc can be a symlink or file depending on OS
+    fi
 }
-#google search and youtube search from comand line
+#google search and youtube search from command line
 google()
 {
     search=""
