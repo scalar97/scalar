@@ -4,12 +4,13 @@
 
 if test $(uname) = 'Linux'; then
     # if .alias is being used on Arch-Linux
+    alias cl='sudo bleachbit'
+    alias db='sudo /usr/libexec/locate.updatedb'
+    alias db='sudo updatedb'
+    alias diff='diff -y --color=always'
+    alias mandb='sudo mandb'
     alias pacman='sudo pacman --color always'
     alias sp='sudo pacman -Syu;yaourt -Syu'
-    alias mandb='sudo mandb'
-    alias db='sudo updatedb'
-    alias cl='sudo bleachbit'
-    alias diff='diff -y --color=always'
 else
     # .alias is being used on Darwin
     alias db='sudo /usr/libexec/locate.updatedb'
@@ -52,35 +53,36 @@ function joke(){
     done
 }
 function ly() {
-    python3.6 $HOME/Desktop/GIT/Experimental/python/lyrics-finder/lyrics_finder.py $@ | more
+    python3.6 $HOME/Desktop/GIT/Ly/ly.py $@ | less
 }
 # custom aliaces
-alias m='$OPEN https://mail.google.com/mail/u/0/#inbox'
-alias emacs='emacs-25.3'
-alias python='python3.7'
-alias l='ls -alFgG'
-alias ll='l'
-alias la='ls -AF'
-alias grep='grep --color=always'
-alias gdb='gdb -q'
-alias bc='bc -q'
-alias top='htop'
-alias locate='swap_pipe "locate" "more" $1'
-alias j='swap_pipe "joke.sh" "less" 8'
-alias apropos='swap_pipe "apropos" "more" $1'
-alias gh='git_do "github"'
-alias gp='git push'
-alias gaa='git add --all && gs'
-alias gss='git_dir "gs"' # gets the status of all remote repos in the current workspace
-alias gpp='git_dir "git pull"'   # pull all directories at once.
-alias gll='git_dir "gl" "head -n 1"'   # log all directories at once.
-alias ..='cd ..'
 alias ...='cd ../..'
-alias .b='. ~/.bashrc' # on Darwin, .bashrc is a symlink to .bash_profile
-alias g="google" #alias to the google function in .bash_profile
-alias y='google -youtube'
-alias wiki='google wikipedia'
-alias kl='kill %1'
-alias ps='ps -a'
+alias ..='cd ..'
+alias .b='. ~/.bashrc' # on Darwin, .bashrc can be a symlink to .bash_profile
+alias apropos='swap_pipe "apropos" "more" $1'
+alias bc='bc -q'
+alias by='emacs-25.3 ~/.bashrc'
 alias c='clear'
+alias emacs='emacs-25.3'
+alias g="google" #alias to the google function in .bash_profile
+alias gaa='git add --all && gs'
+alias gdb='gdb -q'
+alias gh='git_do "github"'
+alias gll='git_dir "gl" "head -n 1"'   # log all directories at once.
+alias gp='git push'
+alias gpp='git_dir "git pull"'   # pull all directories at once.
+alias grep='grep --color=always'
+alias gss='git_dir "gs"' # gets the status of all remote repos in the current workspace
+alias j='swap_pipe "joke.sh" "less" 8'
 alias jac='javac'
+alias kl='kill %1'
+alias l='ls -alFgG'
+alias la='ls -AF'
+alias ll='l'
+alias locate='swap_pipe "locate" "more" $1'
+alias m='$OPEN https://mail.google.com/mail/u/0/#inbox'
+alias ps='ps -a'
+alias python='python3.6'
+alias top='htop'
+alias wiki='google wikipedia'
+alias y='google -youtube'

@@ -50,11 +50,7 @@ export EDITOR="emacs-25.3"
 export PS1='\[\033[1;30m\]$(get_ps1)..\[\033[1;31m\]$(basename $PWD) \[\033[1;30;m\]\$\[\033[0;m\] '
 export PS2="$ "
 
-# Custom variables
-rc="$HOME/.bashrc" #save the .bashrc file path in a variable for fast typing
-
 # set global variable based on OS in (LINUX, DARWIN)
-
 if test $(uname) = 'Linux'; then
     # if .alias is being used on Arch-Linux
     OPEN="xdg-open"
@@ -84,8 +80,8 @@ al(){
     else
 	# create an alias then write it to ~/.alias
 	echo 'alias '$1="'$2'" >> ~/.alias
-	. ~/.bashrc # .bashrc can be a symlink or file depending on OS
     fi
+    . ~/.bashrc
 }
 #google search and youtube search from command line
 google()
