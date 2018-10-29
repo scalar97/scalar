@@ -1,3 +1,5 @@
+#!/usr/bin/env bash
+
 # Bash script to backup my config files from my Linux to 
 # my windows partition.
 # I can now just edit the $CONFIG_FILE to add files that 

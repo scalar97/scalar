@@ -1,4 +1,4 @@
-arp(4)  		 - Address Resolution Protocol e.g arp -a
+arp(4)			 - Address Resolution Protocol e.g arp -a
 rarp
 finger(1)		 - user information lookup program e.g finger <ip | hostname> 
 host <ip | hostname>     - DNS lookup utility
@@ -12,5 +12,5 @@ dig(1)                   - DNS lookup utility
 nslookup(1)              - query Internet name servers interactively. e.g nslookup <ip | hostname>
 scp(1)                   - secure copy (remote file copy program) e.g scp $file user@targethost:/$path
 w(1)                     - display who is logged in and what they are doing
-nmap 			 - Network exploration tool and security/port scanner e.g nmap 127.0.0.1
+nmap			 - Network exploration tool and security/port scanner e.g nmap 127.0.0.1
 route(8)                 - manually manipulate the routing tables
