@@ -26,12 +26,14 @@ swap_pipe() { $1 $3| $2;}
 cag() { cat "$1" | grep "$2"; } # cat and grep a keyword
 hig() { history | grep $1; }
 function gs() {
-    value=$((git status -s) 2>&1)
-    case $value in
-	"fatal"*) echo "Not a git repo!";;
-	"") echo "All clean!";;
-	*) git status -s ;;
-    esac
+    [ $PWD = $GIT_WORKSPACE ] && gss || {
+	  value=$((git status -s) 2>&1)
+	  case $value in
+	      "fatal"*) echo "Not a git repo!";;
+	      "") echo "All clean!";;
+	      *) git status -s ;;
+	  esac
+    }
 }
 function ga() { git add $@ && gs;}
 function gl() { git log --graph --pretty=format:'%Cred%h%Creset - %C(bold green)(%cr)%Creset%C(yellow) : %s %C(bold blue)%d%Creset' --abbrev-commit  $@ ;}
@@ -71,6 +73,8 @@ alias gh='git_do "github"'
 alias gll='git_dir "gl" "head -n 1"'   # log all directories at once.
 alias gp='git push'
 alias gpp='git_dir "git pull"'   # pull all directories at once.
+alias gr='git checkout'
+alias grc='git commit --amend && git push origin master --force'
 alias grep='grep --color=always'
 alias gss='git_dir "gs"' # gets the status of all remote repos in the current workspace
 alias j='swap_pipe "joke.sh" "less" 8'
