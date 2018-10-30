@@ -57,6 +57,13 @@ function joke(){
 function ly() {
     python3.6 $HOME/Desktop/GIT/Ly/ly.py $@ | less
 }
+# display the lyrics starting 3 lines from the first occurence of $1 to lyf,
+# then 12 lines after. 12+3 = 15
+function lyf() {
+    keyword=$1 && shift
+    ly $@ | grep -B3 -A15 $keyword | head -n 15
+}
+
 # custom aliaces
 alias ...='cd ../..'
 alias ..='cd ..'
