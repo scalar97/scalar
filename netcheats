@@ -14,3 +14,6 @@ scp(1)                   - secure copy (remote file copy program) e.g scp $file 
 w(1)                     - display who is logged in and what they are doing
 nmap			 - Network exploration tool and security/port scanner e.g nmap 127.0.0.1
 route(8)                 - manually manipulate the routing tables
+sftp(1)                  - secure file transfer program
+			   e.g sftp remote_username@public_ip_address,
+			   then use put|get to send|download files, PS: only tried on same network so far.
