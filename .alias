@@ -35,7 +35,9 @@ function gs() {
 	  esac
     }
 }
-function ga() { git add $@ && gs;}
+function gaa() {
+    ([ $# -eq 0 ] && git add -A || git add $@ ) && gs;
+}
 function gl() { git log --graph --pretty=format:'%Cred%h%Creset - %C(bold green)(%cr)%Creset%C(yellow) : %s %C(bold blue)%d%Creset' --abbrev-commit  $@ ;}
 function github() {
     repository="$([ -d ".git" ] && echo $(basename $PWD) || echo "")"
@@ -74,8 +76,8 @@ alias by='emacs-25.3 ~/.bashrc'
 alias c='clear'
 alias emacs='emacs-25.3'
 alias g="google" #alias to the google function in .bash_profile
-alias gaa='git add --all && gs'
 alias gdb='gdb -q'
+alias gdd='git_dir "gd"'
 alias gh='git_do "github"'
 alias gll='git_dir "gl" "head -n 1"'   # log all directories at once.
 alias gp='git push'
