@@ -127,7 +127,7 @@ function git_do() {
 function git_dir() {
     # check if current directory is already a branch or run through every subdirectory.
     pushd . > /dev/null
-    for dir in $GIT_WORKSPACE/*; do
+    for dir in $(find $GIT_WORKSPACE -maxdepth 1); do
 	[ -d "$dir/.git" ] && builtin cd $dir && printf "\n\033[1;33m$(basename $PWD)\033[0m\n" && eval "$@" && builtin cd ../
     done
     popd > /dev/null
