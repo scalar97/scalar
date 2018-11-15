@@ -6,17 +6,16 @@
 [[ $- != *i* ]] && return
 
 # for setting history length see HISTSIZE and HISTFILESIZE in bash(1)
-HISTSIZE=1000
-HISTFILESIZE=2000
-# disable adding duplicated lines or starting with space
+HISTSIZE=10000
+HISTFILESIZE=20000
 HISTCONTROL=ignoreboth
 
 # append to the history file, don't overwrite it
 shopt -s histappend
 # checks and resises the window size if necessary.
-# shopt -s checkwinsize
+shopt -s checkwinsize
 
-# partial path creation
+# custom prompt
 
 get_ps1() {
     # nested working directory from home directory or outside and no ~ expansion
@@ -24,11 +23,10 @@ get_ps1() {
     ps1="$(pwd | cut -d '/' -f-$escape)"
     [[ $(uname) = "Linux" ]] && echo -e "${ps1//$HOME/\~}" ||echo -e "${ps1//$HOME/~}"
 }
-# set encvironemental variables.
-# Node.js dependency variables
+# set shell  variables.
 ICU4C="/usr/local/opt/icu4c"
-# GIT workspace
 GIT_WORKSPACE="$HOME/Desktop/GIT"
+
 # openSSL
 export PATH="/usr/local/opt/openssl/bin:$PATH"
 export LDFLAGS="-L/usr/local/opt/openssl/lib"
@@ -38,7 +36,17 @@ export PKG_CONFIG_PATH="/usr/local/opt/openssl/lib/pkgconfig"
 # readline
 export LDFLAGS="-L/usr/local/opt/readline/lib"
 export CPPFLAGS="-I/usr/local/opt/readline/include"
- 
+
+# GOOGLE CLOUD SDK
+# The next line updates PATH for the Google Cloud SDK.
+if [ -f '/Users/tati/Library/google-cloud-sdk/path.bash.inc' ]; then
+  . '/Users/tati/Library/google-cloud-sdk/path.bash.inc'; fi
+
+# The next line enables shell command completion for gcloud.
+if [ -f '/Users/tati/Library/google-cloud-sdk/completion.bash.inc' ]; then
+  . '/Users/tati/Library/google-cloud-sdk/completion.bash.inc';
+fi
+
 export CLICOLOR=1
 export ANDROID_HOME=/Users/$USER/Library/Android/sdk
 export PATH=${PATH}:$ANDROID_HOME/tools:$ANDROID_HOME/platform-tools
@@ -63,7 +71,7 @@ if test $(uname) = 'Linux'; then
       . /usr/share/bash-completion/bash_completion
     fi
 else
-    OPEN="open" # on Darwin xdg-open equivalent is open
+    OPEN="open" # on Darwin use open
     # eneble auto completion
     if [ -f $(brew --prefix)/etc/bash_completion ]; then
     . $(brew --prefix)/etc/bash_completion

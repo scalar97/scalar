@@ -51,11 +51,6 @@ function gd(){ git diff $@ && gs; }
 function grepp() { grep -rine $([ $# -eq 1 ] && echo  "$1 ." || echo $@);}
 cd() { [ $# -eq 0 ] && builtin cd ~  ||  { builtin cd "$1" && echo && ls -aFG && echo;} }
 
-function joke(){
-    for i in $(seq 1 $1); do
-	fortune -s | cowsay -f /usr/local/Cellar/cowsay/3.04/share/cows/small.cow
-    done
-}
 function ly() {
     python3.6 $HOME/Desktop/GIT/Ly/ly.py $@ | less
 }
@@ -71,32 +66,28 @@ alias ...='cd ../..'
 alias ..='cd ..'
 alias .b='. ~/.bashrc' # on Darwin, .bashrc can be a symlink to .bash_profile
 alias apropos='swap_pipe "apropos" "more" $1'
-alias bc='bc -q'
-alias by='emacs-25.3 ~/.bashrc'
+alias by='$EDITOR ~/.bashrc'
 alias c='clear'
-alias emacs='emacs-25.3'
+alias emacs='$EDITOR'
 alias g="google" #alias to the google function in .bash_profile
-alias gdb='gdb -q'
 alias gdd='git_dir "gd"'
 alias gh='git_do "github"'
 alias gll='git_dir "gl" "head -n 1"'   # log all directories at once.
 alias gp='git push'
 alias gpp='git_dir "git pull"'   # pull all directories at once.
-alias gr='git checkout'
+alias gr='git rm --cached'
 alias grc='git commit --amend && git push origin master --force'
 alias grep='grep --color=always'
 alias gss='git_dir "gs"' # gets the status of all remote repos in the current workspace
-alias j='swap_pipe "joke.sh" "less" 8'
 alias jac='javac'
 alias kl='kill %1'
 alias l='ls -alFgG'
 alias la='ls -AF'
 alias ll='l'
-alias locate='swap_pipe "locate" "more" $1'
 alias m='$OPEN https://mail.google.com/mail/u/0/#inbox'
 alias ps='ps -a'
 alias python='python3.6'
 alias top='htop'
-alias wiki='google wikipedia'
 alias y='google -youtube'
 alias s='sqlite3 -separator "  |" ~/procrastinate.db'
+alias tomcat='/usr/local/apache-tomcat-9.0.12/bin/startup.sh'
