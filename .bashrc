@@ -48,9 +48,11 @@ if [ -f '/Users/tati/Library/google-cloud-sdk/completion.bash.inc' ]; then
 fi
 
 export CLICOLOR=1
+export JAVA_HOME=$(/usr/libexec/java_home)
 export ANDROID_HOME=/Users/$USER/Library/Android/sdk
 export PATH=${PATH}:$ANDROID_HOME/tools:$ANDROID_HOME/platform-tools
-export PATH=".:$PATH:~/.local/bin/:$ICU4C/bin:$ICU4C/sbin:$GIT_WORKSPACE/.dotfiles:/Applications/XAMPP/xamppfiles/bin"
+export PATH="$PATH:/usr/local/Cellar/mongodb/4.0.4_1/bin:/Applications/XAMPP/xamppfiles/bin"
+export PATH=".:$PATH:~/.local/bin/:$ICU4C/bin:$ICU4C/sbin:$GIT_WORKSPACE/.dotfiles"
 export PKG_CONFIG_PATH="/usr/local/opt/icu4c/lib/pkgconfig"
 export CDPATH=".:~:~/Desktop/:~/Desktop/GIT/"
 export LSCOLORS=ExFxBxDxCxegedabagacad
@@ -91,20 +93,20 @@ al(){
     fi
     . ~/.bashrc
 }
-#google search and youtube search from command line
-google()
-{
-    search=""
-    for term in $@; do
-	if [[ "$term" == "-youtube" ]]; then
-	    continue
-	else
-	    search="$search%20$term"
-	fi
+#google search and youtube and github code search from command line
+google() {
+    search=""; option=$1; query="https:/"
+    while (( "$#" )); do
+	shift
+	search="$search%20$1"
     done
-    $OPEN "https://www."$([[ "$1" == '-youtube' ]] &&
-	echo -n "youtube.com/results?search_query" ||
-	echo -n "google.com/search?q" ; echo "=$search");
+    if [ "$option" == '-github' ]; then
+        query="$query/github.com/search?l=Java&type=Code&q";
+    else
+	query="$query/www."$([[ "$option" == '-youtube' ]] &&
+	echo -n "youtube.com/results?search_query" || echo -n "google.com/search?q");
+    fi
+    $OPEN "$query=$(echo $search)"
 }
 # go up the directory tree to find a .git folder, return if / is reached.
 function jump_run() {
