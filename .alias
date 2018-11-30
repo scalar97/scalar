@@ -52,15 +52,22 @@ function grepp() { grep -rine $([ $# -eq 1 ] && echo  "$1 ." || echo $@);}
 cd() { [ $# -eq 0 ] && builtin cd ~  ||  { builtin cd "$1" && echo && ls -aFG && echo;} }
 
 function ly() {
-    python3.6 $HOME/Desktop/GIT/Ly/ly.py $@ | less
+    python3.7 $HOME/Desktop/GIT/Ly/ly.py $@ | less
 }
 # display the lyrics starting 3 lines from the first occurence of $1 to lyf,
 # then 12 lines after. 12+3 = 15
 function lyf() {
     keyword=$1 && shift
-    ly $@ | grep -B3 -A15 $keyword | head -n 15
+    ly $@ | grep --color=always -B3 -A15 $keyword | head -n 15
 }
 
+# rebate nth commit
+function grb(){
+    git rebase -i @~$1
+    git commit --amend
+    git rebase --continue
+    gl
+}
 # custom aliaces
 alias ...='cd ../..'
 alias ..='cd ..'
@@ -86,8 +93,11 @@ alias la='ls -AF'
 alias ll='l'
 alias m='$OPEN https://mail.google.com/mail/u/0/#inbox'
 alias ps='ps -a'
-alias python='python3.6'
+alias python='python3.7'
 alias top='htop'
 alias y='google -youtube'
 alias s='sqlite3 -separator "  |" ~/procrastinate.db'
 alias tomcat='/usr/local/apache-tomcat-9.0.12/bin/startup.sh'
+alias ga='gaa'
+alias e='emacs'
+alias cs='google -github'
