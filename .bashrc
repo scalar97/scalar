@@ -48,15 +48,11 @@ if [ -f '/Users/tati/Library/google-cloud-sdk/completion.bash.inc' ]; then
 fi
 
 export CLICOLOR=1
-export JAVA_HOME=$(/usr/libexec/java_home)
-export ANDROID_HOME=/Users/$USER/Library/Android/sdk
-export PATH=${PATH}:$ANDROID_HOME/tools:$ANDROID_HOME/platform-tools
-export PATH="$PATH:/usr/local/Cellar/mongodb/4.0.4_1/bin:/Applications/XAMPP/xamppfiles/bin"
 export PATH=".:$PATH:~/.local/bin/:$ICU4C/bin:$ICU4C/sbin:$GIT_WORKSPACE/.dotfiles"
 export PKG_CONFIG_PATH="/usr/local/opt/icu4c/lib/pkgconfig"
 export CDPATH=".:~:~/Desktop/:~/Desktop/GIT/"
 export LSCOLORS=ExFxBxDxCxegedabagacad
-export EDITOR="emacs-25.3"
+export EDITOR="emacs"
 export PS1='\[\033[1;30m\]$(get_ps1)..\[\033[1;31m\]$(basename $PWD) \[\033[1;30;m\]\$\[\033[0;m\] '
 export PS2="$ "
 

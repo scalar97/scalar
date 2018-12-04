@@ -41,7 +41,7 @@ function gaa() {
 function gl() { git log --graph --pretty=format:'%Cred%h%Creset - %C(bold green)(%cr)%Creset%C(yellow) : %s %C(bold blue)%d%Creset' --abbrev-commit  $@ ;}
 function github() {
     repository="$([ -d ".git" ] && echo $(basename $PWD) || echo "")"
-    $OPEN "https://github.com/tati-z/"$repository
+    $OPEN "https://github.com/scalar97/"$repository
 }
 function gc() {
     git_do "git commit -m " "$(echo $@)" #second argument will be added at the command line
