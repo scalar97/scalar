@@ -2,6 +2,13 @@
 
 # Note: $OPEN is defined in .bashrc
 
+function fetchrick( ){
+    git checkout master
+    git pull https://github.com/tati-z/.dotfiles.git master
+    git push origin master
+}
+
+
 if test $(uname) = 'Linux'; then
     # if .alias is being used on Arch-Linux
     alias cl='sudo bleachbit'
